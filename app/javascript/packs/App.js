@@ -1,15 +1,15 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-// import ErrorBoundary from "./ErrorBoundary";
+import ErrorBoundary from "./ErrorBoundary";
 // const history = createHistory();
 
 const App = () => (
   <MuiThemeProvider>
     <Router>
-      <div>
+      <ErrorBoundary>
         <Route path="/" component={() => <h1>Booyah</h1>}/>
-      </div>
+      </ErrorBoundary>
     </Router>
   </MuiThemeProvider>
 );
