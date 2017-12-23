@@ -60,7 +60,7 @@ export default class CoachRegister extends React.Component {
 
   render () {
     const {team, email, password, signedIn} = this.state;
-    return <div className="registration-form">
+    return <div className="coach-registration registration-form">
       {signedIn && <Redirect to="/players"/>}
       <h1>Create an Account</h1>
       <div className="text-fields">

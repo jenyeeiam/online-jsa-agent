@@ -3,8 +3,10 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import ErrorBoundary from "./ErrorBoundary";
+import NavBar from "./NavBar";
 import Welcome from "./Welcome";
 import CoachRegister from "./CoachRegister";
+import PlayerRegister from "./PlayerRegister";
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -20,8 +22,10 @@ const App = () => (
   <MuiThemeProvider muiTheme={muiTheme}>
     <Router>
       <ErrorBoundary>
+        <Route path="/" component={NavBar}/>
         <Route exact path="/" component={Welcome}/>
         <Route exact path="/register/coaches" component={CoachRegister}/>
+        <Route exact path="/register/players" component={PlayerRegister}/>
         <Route exact path="/players" component={() => <h1>all the players</h1>}/>
       </ErrorBoundary>
     </Router>

@@ -13,6 +13,25 @@ body {
   font-family: "Montserrat", "Roboto", sans-serif;
 }
 
+//****NAVBAR******************************//
+.nav-bar {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 120px;
+  background-color: $purple;
+  .logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    img {
+      max-height: 120px;
+    }
+  }
+}
+//*********************************************//
+
+
 //****WELCOME PAGE******************************//
 .welcome-container {
   height: 100vh;
@@ -25,29 +44,6 @@ body {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  .nav-bar {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 120px;
-    background-color: $purple;
-    .logo {
-      position: absolute;
-      top: 0;
-      left: 0;
-      img {
-        max-height: 120px;
-      }
-    }
-  }
-  .tagline {
-    width: 500px;
-
-    padding: 120px;
-    h2 {
-      color: $background;
-    }
-  }
   .login-register {
     background-color: rgba(0, 0, 0, 0.5);
     color: $gold;
@@ -67,14 +63,13 @@ body {
 
 
 
-
+//****REGISTRATION FORM*****************************//
 
 .registration-form {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: 70px 200px 50px;
-  width: 500px;
-  margin: 0 auto;
+  margin: 150px auto 0 auto;
   padding: 15px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   h1 {
@@ -95,3 +90,11 @@ body {
   }
 }
 
+.coach-registration {
+  width: 500px;
+}
+
+.player-registration {
+  width: 750px;
+}
+//******************************************//
