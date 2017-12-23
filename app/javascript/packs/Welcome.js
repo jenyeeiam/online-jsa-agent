@@ -1,13 +1,19 @@
 import React from "react";
 import RaisedButton from "material-ui/RaisedButton";
+import logo from './logo.png';
 import { Link } from "react-router-dom";
 
 export default function Welcome() {
-  return <div>
+  return <div className="welcome-container">
+    <div className="nav-bar">
+      <div className="logo">
+        <Link to='/'>
+          <img src={logo} alt="logo" />
+        </Link>
+      </div>
+    </div>
     <div className="login-register">
-      <h1>
-        Your Japanese Online Agent
-      </h1>
+      <h1>connecting japanese professional softball teams with foreign players</h1>
       <div className="login-btn">
         <Link to="/login">
           <RaisedButton

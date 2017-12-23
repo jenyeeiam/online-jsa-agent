@@ -4,26 +4,70 @@ $ul-green: #72C267;
 $ul-light-blue: #00c0e2;
 $ul-dark-blue: #676f7c;
 $navbar-background: #2f3f4b;
-$material-ui-primary: #00c0e2;
+$purple: #542e68;
+$gold: #ffbc49;
 
 body {
   margin: 0;
   padding: 0;
-  font-family: "Roboto", sans-serif;
+  font-family: "Montserrat", "Roboto", sans-serif;
 }
 
-.login-register {
-  background-color: #aaa;
-  padding: 15px;
-  width: 250px;
-  height: 300px;
-  margin: 0 auto;
-  .login-btn {
-    display: block;
-    width: 70%;
-    margin: 10px auto;
+//****WELCOME PAGE******************************//
+.welcome-container {
+  height: 100vh;
+  width: 100%;
+  background: linear-gradient(
+                  rgba(0, 0, 0, 0.5),
+                  rgba(0, 0, 0, 0.5)
+  ), url(grant-mccurdy-20366.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  .nav-bar {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 120px;
+    background-color: $purple;
+    .logo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      img {
+        max-height: 120px;
+      }
+    }
+  }
+  .tagline {
+    width: 500px;
+
+    padding: 120px;
+    h2 {
+      color: $background;
+    }
+  }
+  .login-register {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: $gold;
+    padding: 120px;
+    width: 500px;
+    text-transform: uppercase;
+    //height: 300px;
+    margin: 0 auto;
+    .login-btn {
+      display: block;
+      width: 70%;
+      margin: 10px auto;
+    }
   }
 }
+//******************************************//
+
+
+
+
 
 .registration-form {
   display: grid;
