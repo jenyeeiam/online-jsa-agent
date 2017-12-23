@@ -2,7 +2,7 @@ import React from "react";
 import RaisedButton from "material-ui/RaisedButton";
 import FlatButton from "material-ui/FlatButton";
 import TextField from 'material-ui/TextField';
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import axios from 'axios';
 
 export default class CoachRegister extends React.Component {
@@ -13,14 +13,13 @@ export default class CoachRegister extends React.Component {
       team: '',
       email: '',
       password: '',
-      token: ''
+      token: '',
+      signedIn: false
     };
   }
 
   componentDidMount() {
     this.setState({token: document.getElementsByTagName("meta")[1].content});
-    console.log(document.getElementsByTagName("meta")[1].content);
-    console.log(this.state)
   }
 
   handleChangeTeam(text) {
@@ -50,36 +49,36 @@ export default class CoachRegister extends React.Component {
         email: email,
         password: password
       }
-    }).then(function (response) {
-      console.log(response);
+    }).then((response) => {
+      this.setState({signedIn: true})
     })
-      .catch(function (error) {
+      .catch((error) => {
         console.log(error);
       });
 
   }
 
   render () {
-    const {team, email, password} = this.state;
-
+    const {team, email, password, signedIn} = this.state;
     return <div className="registration-form">
+      {signedIn && <Redirect to="/players"/>}
       <h1>Create an Account</h1>
       <div className="text-fields">
         <TextField
           hintText="Team"
-          errorText="This field is required"
+          errorText={team.length > 0 ? '' : "This field is required"}
           onChange={(e, newVal) => this.handleChangeTeam(newVal)}
           value={team}
         />
         <TextField
           hintText="Email"
-          errorText="This field is required"
+          errorText={email.length > 0 ? '' : "This field is required"}
           onChange={(e, newVal) => this.handleChangeEmail(newVal)}
           value={email}
         />
         <TextField
           hintText="Password"
-          errorText="This field is required"
+          errorText={password.length > 0 ? '' : "This field is required"}
           type="password"
           onChange={(e, newVal) => this.handleChangePassword(newVal)}
           value={password}

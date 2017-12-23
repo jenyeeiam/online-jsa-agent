@@ -13,7 +13,7 @@ const muiTheme = getMuiTheme({
     accent1Color: '#d67010',
     accent2Color: '#a6570c'
   },
-  fontFamily: "Montserrat, Roboto, sans-serif"
+  fontFamily: "Roboto, sans-serif"
 });
 
 const App = () => (
@@ -22,6 +22,7 @@ const App = () => (
       <ErrorBoundary>
         <Route exact path="/" component={Welcome}/>
         <Route exact path="/register/coaches" component={CoachRegister}/>
+        <Route exact path="/players" component={() => <h1>all the players</h1>}/>
       </ErrorBoundary>
     </Router>
   </MuiThemeProvider>
