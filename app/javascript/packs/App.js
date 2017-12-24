@@ -7,6 +7,7 @@ import NavBar from "./NavBar";
 import Welcome from "./Welcome";
 import CoachRegister from "./CoachRegister";
 import PlayerRegister from "./PlayerRegister";
+import PlayerList from "./PlayerList";
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -26,7 +27,7 @@ const App = () => (
         <Route exact path="/" component={Welcome}/>
         <Route exact path="/register/coaches" component={CoachRegister}/>
         <Route exact path="/register/players" component={PlayerRegister}/>
-        <Route exact path="/players" component={() => <h1>all the players</h1>}/>
+        <Route exact path="/players-list" component={PlayerList}/>
       </ErrorBoundary>
     </Router>
   </MuiThemeProvider>

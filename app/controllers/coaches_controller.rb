@@ -3,7 +3,7 @@ class CoachesController < ApplicationController
     if params
       c = Coach.new coach_params
       if c.save
-        payload = {data: c.password}
+        payload = {data: c.email}
         token = JWT.encode payload, nil, 'none'
         render json: {token: token}
       else
