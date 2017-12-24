@@ -3,9 +3,8 @@ class CoachesController < ApplicationController
     if params
       c = Coach.new coach_params
       if c.save
-        payload = {data: c.email}
+        payload = {data: c.password}
         token = JWT.encode payload, nil, 'none'
-        puts token
         render json: {token: token}
       else
         render json: {error: 'couldnt save'}
@@ -17,6 +16,6 @@ class CoachesController < ApplicationController
 
   private
   def coach_params
-    params.required(:coach).permit(:team, :email, :password)
+    params.permit(:team, :email, :password)
   end
 end

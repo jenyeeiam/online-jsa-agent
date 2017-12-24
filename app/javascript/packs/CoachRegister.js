@@ -14,7 +14,8 @@ export default class CoachRegister extends React.Component {
       email: '',
       password: '',
       token: '',
-      signedIn: false
+      signedIn: false,
+      error: ''
     };
   }
 
@@ -34,34 +35,45 @@ export default class CoachRegister extends React.Component {
     this.setState(state => ({ ...state, password: text}));
   }
 
+  handleValidateParams(team, email, password) {
+    return team.length > 0 && email.length > 0 && password.length > 5
+  }
+
   handleSubmit() {
     const {team, email, password} = this.state;
-    axios({
-      method: 'post',
-      url: '/coaches',
-      headers: {
-        "Content-Type": "application/json",
-        'X-Requested-With': 'XMLHttpRequest',
-        "X-CSRF-Token": document.getElementsByTagName("meta")[1].content
-      },
-      data: {
-        team,
-        email,
-        password
-      }
-    }).then((response) => {
-      this.setState({signedIn: true})
-    })
-      .catch((error) => {
-        console.log(error);
-      });
+    if(this.handleValidateParams(team, email, password)) {
+      axios({
+        method: 'post',
+        url: '/coaches',
+        headers: {
+          "Content-Type": "application/json",
+          'X-Requested-With': 'XMLHttpRequest',
+          "X-CSRF-Token": document.getElementsByTagName("meta")[1].content
+        },
+        data: {
+          team,
+          email,
+          password
+        }
+      }).then((response) => {
+        console.log(response)
+        localStorage.setItem('token', response.data.token)
+        // this.setState({signedIn: true})
+      })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      this.setState({error: 'Please fill in all required fields'})
+    }
 
   }
 
   render () {
-    const {team, email, password, signedIn} = this.state;
+    const {team, email, password, signedIn, error} = this.state;
     return <div className="coach-registration registration-form">
       {signedIn && <Redirect to="/players"/>}
+      {error.length > 0 && <h3>{error}</h3>}
       <h1>Create an Account</h1>
       <div className="text-fields">
         <TextField
@@ -78,7 +90,7 @@ export default class CoachRegister extends React.Component {
         />
         <TextField
           hintText="Password"
-          errorText={password.length > 0 ? '' : "This field is required"}
+          errorText={password.length > 5 ? '' : "Must be 6 or more characters"}
           type="password"
           onChange={(e, newVal) => this.handleChangePassword(newVal)}
           value={password}
