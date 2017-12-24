@@ -45,9 +45,9 @@ export default class CoachRegister extends React.Component {
         "X-CSRF-Token": document.getElementsByTagName("meta")[1].content
       },
       data: {
-        team: team,
-        email: email,
-        password: password
+        team,
+        email,
+        password
       }
     }).then((response) => {
       this.setState({signedIn: true})
