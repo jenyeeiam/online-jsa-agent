@@ -3,7 +3,10 @@ class CoachesController < ApplicationController
     if params
       c = Coach.new coach_params
       if c.save
-        render json: {error: nil}
+        payload = {data: c.email}
+        token = JWT.encode payload, nil, 'none'
+        puts token
+        render json: {token: token}
       else
         render json: {error: 'couldnt save'}
       end
