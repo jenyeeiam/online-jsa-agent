@@ -1,11 +1,10 @@
 $text: #222;
 $background: #FFFFFF;
-$ul-green: #72C267;
-$ul-light-blue: #00c0e2;
 $ul-dark-blue: #676f7c;
 $navbar-background: #2f3f4b;
 $purple: #542e68;
 $gold: #ffbc49;
+$pink: #ffb7c5;
 
 body {
   margin: 0;
@@ -47,21 +46,46 @@ body {
   .login-register {
     background-color: rgba(0, 0, 0, 0.5);
     color: $gold;
-    padding: 120px;
-    width: 500px;
+    padding-top: 140px;
+    padding-bottom: 50px;
+    width: 75%;
+    text-align: center;
     text-transform: uppercase;
-    //height: 300px;
     margin: 0 auto;
-    .login-btn {
-      display: block;
-      width: 70%;
-      margin: 10px auto;
+    border-radius: 10px;
+    .fake-button {
+      color: $pink;
+      margin-bottom: 20px;
+    }
+    .description {
+      text-transform: none;
+      width: 50%;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .fake-button > span:hover {
+      color: $gold;
+      cursor: pointer;
+      padding: 6px;
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+    .welcome-buttons {
+      width: 50%;
+      margin: 0 auto;
+      .login-btn {
+        display: inline-block;
+        padding: 0 15px;
+      }
     }
   }
 }
 //******************************************//
 
-
+// .login-btn {
+//   display: block;
+//   width: 70%;
+//   margin: 10px auto;
+// }
 
 //****REGISTRATION FORM*****************************//
 
