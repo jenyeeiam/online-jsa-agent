@@ -34,7 +34,7 @@ const App = () => (
         <Route exact path="/login/coaches" component={CoachLogin}/>
         <Route exact path="/register/players" component={PlayerRegister}/>
         <Route exact path="/players-list" component={PlayerList}/>
-        <Route exact path="message/:player_id" component={NewMessage} />
+        <Route exact path="/message/:player_id" component={NewMessage} />
       </ErrorBoundary>
     </Router>
   </MuiThemeProvider>

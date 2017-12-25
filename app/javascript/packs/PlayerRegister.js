@@ -249,6 +249,7 @@ export default class PlayerRegister extends React.Component {
             multiLine={true}
             rows={2}
             fullWidth={true}
+            onChange={(e, newVal) => this.handleChangeAccolades(newVal)}
           />
         </GridTile>
       </GridList>
