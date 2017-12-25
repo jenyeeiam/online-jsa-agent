@@ -2,23 +2,40 @@ import React from "react";
 import RaisedButton from "material-ui/RaisedButton";
 import FlatButton from "material-ui/FlatButton";
 import TextField from 'material-ui/TextField';
+import {GridList, GridTile} from 'material-ui/GridList';
 import { Link, Redirect } from "react-router-dom";
+import SelectField from 'material-ui/SelectField';
+import Slider from 'material-ui/Slider';
+import MenuItem from 'material-ui/MenuItem';
 import axios from 'axios';
+
+const positions = [
+  'LF',
+  'CF',
+  'RF',
+  '3B',
+  'SS',
+  '2B',
+  '1B',
+  'P',
+  'C'
+];
 
 export default class PlayerRegister extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChangBats = this.handleChangeBats.bind(this);
     this.state = {
       name: '',
-      position: '',
+      position: [],
       bats: '',
       throws: '',
       email: '',
       almaMater: '',
       accolades: '',
-      battingAvg: '',
-      era: '',
+      battingAvg: 0.00,
+      era: 0.00,
       password: '',
       token: '',
       success: false
@@ -33,16 +50,16 @@ export default class PlayerRegister extends React.Component {
     this.setState(state => ({ ...state, name}));
   }
 
-  handleChangePosition(position) {
-    this.setState(state => ({ ...state, position}));
+  handleChangePosition = (event, index, value) => {
+    this.setState({position: value});
   }
 
-  handleChangeBats(bats) {
-    this.setState(state => ({ ...state, bats}));
+  handleChangeBats = (event, index, value) => {
+    this.setState({bats: value});
   }
 
-  handleChangeThrows(throws) {
-    this.setState(state => ({ ...state, throws}));
+  handleChangeThrows = (event, index, value) => {
+    this.setState({throws: value});
   }
 
   handleChangeEmail(email) {
@@ -122,48 +139,126 @@ export default class PlayerRegister extends React.Component {
       era,
       password
     } = this.state;
+
+    console.log(position)
     return <div className="player-registration registration-form">
       <h1>Create an Account</h1>
-      <div className="text-fields">
-        <TextField
-          hintText="Name"
-          errorText={name.length > 0 ? '' : "This field is required"}
-          onChange={(e, newVal) => this.handleChangeName(newVal)}
-          value={name}
-        />
-        <TextField
-          hintText="Email"
-          errorText={email.length > 0 ? '' : "This field is required"}
-          onChange={(e, newVal) => this.handleChangeEmail(newVal)}
-          value={email}
-        />
-        <TextField
-          hintText="Password"
-          errorText={password.length > 0 ? '' : "This field is required"}
-          type="password"
-          onChange={(e, newVal) => this.handleChangePassword(newVal)}
-          value={password}
-        />
-      </div>
+      <GridList
+        cellHeight='auto'
+        cols={2}
+        padding={6}
+      >
+        <GridTile>
+          <TextField
+            hintText="Name"
+            errorText={name.length > 0 ? '' : "This field is required"}
+            onChange={(e, newVal) => this.handleChangeName(newVal)}
+            value={name}
+          />
+        </GridTile>
+        <GridTile>
+          <TextField
+            hintText="Email"
+            errorText={email.length > 0 ? '' : "This field is required"}
+            onChange={(e, newVal) => this.handleChangeEmail(newVal)}
+            value={email}
+          />
+        </GridTile>
+        <GridTile>
+          <TextField
+            hintText="Password"
+            errorText={password.length > 0 ? '' : "This field is required"}
+            type="password"
+            onChange={(e, newVal) => this.handleChangePassword(newVal)}
+            value={password}
+          />
+        </GridTile>
+      </GridList>
       <h1>Player Information</h1>
-      <p>These fields are not required, but it is encouraged to be as detailed as possible. Japanese coaches are not aware of players names and will contact you based on the merit you outline here.</p>
-      <TextField
-        hintText="Accolades"
-        multiLine={true}
-        rows={2}
-      />
-      <RaisedButton
-        className="signup-btn"
-        label="Sign Up"
-        primary={true}
-        onClick={() => this.handleSubmit()}
-      />
-      <Link to="/" className="back-btn">
-        <FlatButton
-          label="Back Home"
+      <p>{"These fields are not required, but it is encouraged to be as detailed as possible. Japanese coaches are not aware of players' names and will contact you based on the merit you outline here."}</p>
+      <GridList
+        cellHeight='auto'
+        cols={2}
+        padding={6}
+      >
+        <GridTile cols={2}>
+          <div className='bats-throws-picker'>
+            <SelectField
+              value={bats}
+              floatingLabelText="Bats"
+              onChange={this.handleChangeBats}
+              style={{width: '30%', marginRight: '10px'}}
+            >
+              <MenuItem value={'R'} primaryText="Right" />
+              <MenuItem value={'L'} primaryText="Left" />
+            </SelectField>
+            <SelectField
+              value={throws}
+              floatingLabelText="Throws"
+              onChange={this.handleChangeThrows}
+              style={{width: '30%', marginRight: '10px'}}
+            >
+              <MenuItem value={'R'} primaryText="Right" />
+              <MenuItem value={'L'} primaryText="Left" />
+            </SelectField>
+            <SelectField
+              value={position}
+              floatingLabelText="Position(s)"
+              onChange={this.handleChangePosition}
+              style={{width: '30%'}}
+              multiple={true}
+            >
+              {positions.map((pos, i) => <MenuItem key={i} value={pos} primaryText={pos} />)}
+            </SelectField>
+          </div>
+        </GridTile>
+        <GridTile>
+          <span className='span-labels'>Batting Average last season {parseFloat(battingAvg)}</span>
+          <Slider
+            defaultValue={parseFloat(battingAvg)}
+            value={parseFloat(battingAvg)}
+            style={{width: '80%'}}
+            onChange={(e, newVal) => this.handleChangeBattingAvg(newVal)}
+          />
+        </GridTile>
+        <GridTile>
+          <span className='span-labels'>ERA last season {era}</span>
+          <Slider
+            defaultValue={0}
+            max={5}
+            value={era}
+            style={{width: '80%'}}
+            onChange={(e, newVal) => this.handleChangeEra(newVal)}
+          />
+        </GridTile>
+        <GridTile>
+          <TextField
+            hintText="College"
+            onChange={(e, newVal) => this.handleChangeAlmaMater(newVal)}
+          />
+        </GridTile>
+        <GridTile cols={2}>
+          <TextField
+            hintText="Accolades"
+            multiLine={true}
+            rows={2}
+            fullWidth={true}
+          />
+        </GridTile>
+      </GridList>
+      <div className='signup-btns'>
+        <RaisedButton
+          label="Sign Up"
           primary={true}
+          onClick={() => this.handleSubmit()}
         />
-      </Link>
+        <Link to="/">
+          <FlatButton
+            label="Back Home"
+            primary={true}
+          />
+        </Link>
+      </div>
     </div>
   }
 }

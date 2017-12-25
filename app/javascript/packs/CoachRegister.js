@@ -95,18 +95,20 @@ export default class CoachRegister extends React.Component {
           value={password}
         />
       </div>
-      <RaisedButton
-        className="signup-btn"
-        label="Sign Up"
-        primary={true}
-        onClick={() => this.handleSubmit()}
-      />
-      <Link to="/" className="back-btn">
-        <FlatButton
-          label="Back Home"
+      <div className="btns">
+        <RaisedButton
+          className="signup-btn"
+          label="Sign Up"
           primary={true}
+          onClick={() => this.handleSubmit()}
         />
-      </Link>
+        <Link to="/" className="back-btn">
+          <FlatButton
+            label="Back Home"
+            primary={true}
+          />
+        </Link>
+      </div>
     </div>
   }
 }
