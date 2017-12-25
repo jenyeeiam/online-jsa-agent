@@ -3,6 +3,7 @@ import TextField from 'material-ui/TextField';
 import { Link, Redirect } from "react-router-dom";
 import RaisedButton from "material-ui/RaisedButton";
 import FlatButton from 'material-ui/FlatButton';
+import {keys} from 'lodash';
 import axios from 'axios';
 
 class NewMessage extends React.Component {
@@ -40,7 +41,8 @@ class NewMessage extends React.Component {
         if(keys(response.data)[0] === 'error') {
           this.setState({error: response.data.error})
         } else {
-          this.setState({messageText: '', success: true})
+          console.log('made it')
+          this.setState({messageText: '', success: true, error: ''})
         }
       }).catch(error => {
         this.setState({error: 'Message failed to send 😢'})
@@ -50,6 +52,7 @@ class NewMessage extends React.Component {
 
   render () {
     const {messageText, success, error} = this.state;
+    console.log(this.state)
     return (
       <div className='new-message'>
         {error && <p>{error}</p>}
