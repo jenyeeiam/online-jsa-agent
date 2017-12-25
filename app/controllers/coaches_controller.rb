@@ -14,8 +14,18 @@ class CoachesController < ApplicationController
     end
   end
 
+  def login
+    if params
+      
+    end
+  end
+
   private
   def coach_params
     params.permit(:team, :email, :password)
+  end
+
+  def login_params
+    params.permit(:email, :password)
   end
 end

@@ -6,6 +6,7 @@ import ErrorBoundary from "./ErrorBoundary";
 import NavBar from "./NavBar";
 import Welcome from "./Welcome";
 import CoachRegister from "./CoachRegister";
+import CoachLogin from "./CoachLogin";
 import PlayerRegister from "./PlayerRegister";
 import PlayerList from "./PlayerList";
 
@@ -26,6 +27,7 @@ const App = () => (
         <Route path="/" component={NavBar}/>
         <Route exact path="/" component={Welcome}/>
         <Route exact path="/register/coaches" component={CoachRegister}/>
+        <Route exact path="/login/coaches" component={CoachLogin}/>
         <Route exact path="/register/players" component={PlayerRegister}/>
         <Route exact path="/players-list" component={PlayerList}/>
       </ErrorBoundary>
