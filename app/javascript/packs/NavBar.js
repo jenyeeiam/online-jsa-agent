@@ -5,6 +5,7 @@ import logo from './logo.png';
 export default class NavBar extends React.Component {
   constructor(props) {
     super(props);
+    this.handleSignOut = this.handleSignOut.bind(this);
     this.state = {
       signedIn: false
     };
@@ -14,13 +15,20 @@ export default class NavBar extends React.Component {
     this.setState({signedIn: !!localStorage.getItem('token')})
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if(prevProps.location.pathname !== this.props.location.pathname) {
+      this.setState({signedIn: !!localStorage.getItem('token')})
+    }
+  }
+
   handleSignOut() {
-    this.setState({signedIn: false})
+    this.setState({signedIn: false});
+    localStorage.removeItem('token');
+    this.props.history.replace('/')
   }
 
   render() {
     const {signedIn} = this.state;
-    const ifHome = this.props.history.location.pathname === '/';
 
     return <div className="nav-bar">
       <div className="logo">
@@ -28,7 +36,7 @@ export default class NavBar extends React.Component {
           <img src={logo} alt="logo" />
         </Link>
       </div>
-        {signedIn && <span className='logout-btn' onClick={this.handleSignOut}>Logout</span>}
+        {signedIn && <Link to='/' onClick={this.handleSignOut}><span className='logout-btn'>Logout</span></Link>}
     </div>
   }
 
