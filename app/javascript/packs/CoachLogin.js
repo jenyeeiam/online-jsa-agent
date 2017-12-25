@@ -3,6 +3,7 @@ import RaisedButton from "material-ui/RaisedButton";
 import FlatButton from "material-ui/FlatButton";
 import TextField from 'material-ui/TextField';
 import { Link, Redirect } from "react-router-dom";
+import {keys} from "lodash";
 import axios from 'axios';
 
 class CoachLogin extends React.Component {
@@ -10,7 +11,9 @@ class CoachLogin extends React.Component {
     super(props);
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      error: '',
+      signedIn: false
     }
   }
 
@@ -24,13 +27,42 @@ class CoachLogin extends React.Component {
 
   handleSubmit() {
     const {email, password} = this.state;
+    if(email.length > 0 && password.length > 0) {
+      axios({
+        method: 'post',
+        url: '/coaches/login',
+        headers: {
+          "Content-Type": "application/json",
+          'X-Requested-With': 'XMLHttpRequest',
+          "X-CSRF-Token": document.getElementsByTagName("meta")[1].content
+        },
+        data: {
+          email,
+          password
+        }
+      }).then((response) => {
+        if(keys(response.data)[0] === 'error') {
+          this.setState({error: response.data.error})
+        } else {
+          localStorage.setItem('token', response.data.token);
+          this.setState({signedIn: true})
+        }
+      })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      this.setState({error: 'Please fill in all required fields'})
+    }
   }
 
   render () {
-    const {email, password} = this.state;
+    const {email, password, error, signedIn} = this.state;
 
     return (
       <div className="coach-registration registration-form">
+        {error.length > 0 && <h3>{error}</h3>}
+        {signedIn && <Redirect to="/players"/>}
         <h1>Welcome Back</h1>
         <div className="text-fields">
           <TextField

@@ -15,17 +15,17 @@ class CoachesController < ApplicationController
   end
 
   def login
-    if params
-      
+    if Coach.find_by(email: params[:email]).try(:authenticate, params[:password])
+      payload = {data: params[:email]}
+      token = JWT.encode payload, nil, 'none'
+      render json: {token: token}
+    else
+      render json: {error: 'Incorrect email or password'}
     end
   end
 
   private
   def coach_params
     params.permit(:team, :email, :password)
-  end
-
-  def login_params
-    params.permit(:email, :password)
   end
 end
