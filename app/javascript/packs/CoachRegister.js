@@ -71,7 +71,7 @@ export default class CoachRegister extends React.Component {
   render () {
     const {team, email, password, signedIn, error} = this.state;
     return <div className="coach-registration registration-form">
-      {signedIn && <Redirect to="/players"/>}
+      {signedIn && <Redirect to="/players-list"/>}
       {error.length > 0 && <h3>{error}</h3>}
       <h1>Create an Account</h1>
       <div className="text-fields">

@@ -1,6 +1,7 @@
 class PlayersController < ApplicationController
   def index
     auth_token = request.headers['token']
+    puts auth_token
     if authenticate_coach auth_token
       render json: Player.all
     end

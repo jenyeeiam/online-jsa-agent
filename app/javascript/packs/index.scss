@@ -27,6 +27,17 @@ body {
       max-height: 120px;
     }
   }
+  .logout-btn {
+    color: $gold;
+    float: right;
+    margin: 50px 20px 0 0;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .logout-btn:hover {
+    cursor: pointer;
+    color: $pink;
+  }
 }
 //*********************************************//
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { Redirect } from "react-router-dom";
 
 export default class PlayerRegister extends React.Component {
   constructor(props) {
@@ -10,10 +11,8 @@ export default class PlayerRegister extends React.Component {
   }
 
   componentDidMount() {
-    console.log(localStorage.getItem('token'))
     axios.get('/players', {headers: {'token': localStorage.getItem('token')}})
     .then(response => {
-      console.log(response.data)
       this.setState({players: response.data})
     }).catch(error => {
       console.log(error)
@@ -22,7 +21,9 @@ export default class PlayerRegister extends React.Component {
 
   render() {
     const {players} = this.state;
+    const authToken = localStorage.getItem('token');
     return <div>
+      {!authToken && <Redirect to="/"/>}
       {false && <p>{players[0].name}</p>}
     </div>
   }

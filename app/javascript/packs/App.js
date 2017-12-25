@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Router, Route } from "react-router-dom";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import ErrorBoundary from "./ErrorBoundary";
@@ -9,6 +9,9 @@ import CoachRegister from "./CoachRegister";
 import CoachLogin from "./CoachLogin";
 import PlayerRegister from "./PlayerRegister";
 import PlayerList from "./PlayerList";
+import createBrowserHistory from 'history/createBrowserHistory'
+
+const history = createBrowserHistory();
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -22,7 +25,7 @@ const muiTheme = getMuiTheme({
 
 const App = () => (
   <MuiThemeProvider muiTheme={muiTheme}>
-    <Router>
+    <Router history={history}>
       <ErrorBoundary>
         <Route path="/" component={NavBar}/>
         <Route exact path="/" component={Welcome}/>

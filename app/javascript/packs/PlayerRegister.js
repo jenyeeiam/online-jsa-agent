@@ -220,8 +220,9 @@ export default class PlayerRegister extends React.Component {
         <GridTile>
           <span className='span-labels'>Batting Average last season {battingAvg.toFixed(3)}</span>
           <Slider
-            defaultValue={battingAvg.toFixed(3)}
-            value={battingAvg.toFixed(3)}
+            defaultValue={battingAvg}
+            value={battingAvg}
+            step={0.001}
             style={{width: '80%'}}
             onChange={(e, newVal) => this.handleChangeBattingAvg(newVal)}
           />
