@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import { Redirect } from "react-router-dom";
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import { Link, Redirect } from "react-router-dom";
+import {Card, CardActions, CardHeader, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import Avatar from 'material-ui/Avatar';
 
@@ -31,13 +31,20 @@ export default class PlayerList extends React.Component {
 
   render() {
     const {players, error} = this.state;
-    console.log(players)
     return <div className="players-list">
       {error && <p>{error}</p>}
       {players.map((player, index) => {
+        let subtitle = `Bats/Throws: ${player.bats}/${player.throws} | `;
+        if(player.position === 'P') {
+          subtitle += `ERA: ${player.era}`
+        } else {
+          subtitle += `AVG: ${player.batting_avg}`
+        }
         return (
           <Card key={player.id}>
             <CardHeader
+              title={`Position: ${player.position}`}
+              subtitle={subtitle}
               avatar={<Avatar
                 color={'#ffbc49'}
                 backgroundColor={'#542e68'}
@@ -46,16 +53,14 @@ export default class PlayerList extends React.Component {
                 {player.position || 'N/A'}
               </Avatar>}
             />
-          <CardTitle title={`Player ${player.id}`} subtitle={`Bats: ${player.bats || 'N/A'} | Throws: ${player.throws || 'N/A'} | AVG: ${player.batting_avg || 'N/A'} | ERA: ${player.era || 'N/A'}`} />
+          <CardTitle title={`Player ${player.id}`} subtitle={`College: ${player.alma_mater}`} />
             <CardText>
               {player.accolades}
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-              Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-              Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
             </CardText>
             <CardActions>
-              <FlatButton label={`Message Player ${player.id}`} secondary={true}/>
+              <Link to={`/message/${player.id}`}>
+                <FlatButton label={`Message Player ${player.id}`} secondary={true}/>
+              </Link>
             </CardActions>
           </Card>)
       })}

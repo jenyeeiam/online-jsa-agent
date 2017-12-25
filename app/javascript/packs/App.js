@@ -9,6 +9,7 @@ import CoachRegister from "./CoachRegister";
 import CoachLogin from "./CoachLogin";
 import PlayerRegister from "./PlayerRegister";
 import PlayerList from "./PlayerList";
+import NewMessage from "./NewMessage";
 import createBrowserHistory from 'history/createBrowserHistory'
 
 const history = createBrowserHistory();
@@ -33,6 +34,7 @@ const App = () => (
         <Route exact path="/login/coaches" component={CoachLogin}/>
         <Route exact path="/register/players" component={PlayerRegister}/>
         <Route exact path="/players-list" component={PlayerList}/>
+        <Route exact path="message/:player_id" component={NewMessage} />
       </ErrorBoundary>
     </Router>
   </MuiThemeProvider>

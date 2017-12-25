@@ -2,7 +2,7 @@ class PlayersController < ApplicationController
   def index
     auth_token = request.headers['token']
     if auth_token != 'null' && authenticate_coach(auth_token)
-      render json: Player.all
+      render json: Player.order(id: :desc)
     else
       render json: {error: "Not Authenticated"}
     end
