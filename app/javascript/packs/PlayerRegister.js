@@ -38,7 +38,7 @@ export default class PlayerRegister extends React.Component {
       era: 0.00,
       password: '',
       token: '',
-      success: false
+      error: ''
     };
   }
 
@@ -86,6 +86,10 @@ export default class PlayerRegister extends React.Component {
     this.setState(state => ({ ...state, password: text}));
   }
 
+  handleValidateParams(team, email, password) {
+    return team.length > 0 && email.length > 0 && password.length > 5
+  }
+
   handleSubmit() {
     const {name,
       position,
@@ -112,14 +116,14 @@ export default class PlayerRegister extends React.Component {
         bats,
         throws,
         email,
-        almaMater,
+        alma_mater: almaMater,
         accolades,
-        battingAvg,
+        batting_avg: battingAvg,
         era,
         password
       }
     }).then((response) => {
-      this.setState({success: true})
+      localStorage.setItem('token', response.data.token)
     })
       .catch((error) => {
         console.log(error);
@@ -137,11 +141,12 @@ export default class PlayerRegister extends React.Component {
       accolades,
       battingAvg,
       era,
-      password
+      password,
+      error
     } = this.state;
 
-    console.log(position)
     return <div className="player-registration registration-form">
+      {error.length > 0 && <h3>{error}</h3>}
       <h1>Create an Account</h1>
       <GridList
         cellHeight='auto'
@@ -167,7 +172,7 @@ export default class PlayerRegister extends React.Component {
         <GridTile>
           <TextField
             hintText="Password"
-            errorText={password.length > 0 ? '' : "This field is required"}
+            errorText={password.length > 5 ? '' : "Must be 6 or more characters"}
             type="password"
             onChange={(e, newVal) => this.handleChangePassword(newVal)}
             value={password}
@@ -175,7 +180,7 @@ export default class PlayerRegister extends React.Component {
         </GridTile>
       </GridList>
       <h1>Player Information</h1>
-      <p>{"These fields are not required, but it is encouraged to be as detailed as possible. Japanese coaches are not aware of players' names and will contact you based on the merit you outline here."}</p>
+      <p>{"These fields are not required, but it is encouraged to be as detailed as possible. Japanese coaches are not aware of players' names and will contact you based on the merit you outline here. If a coach is interested in you they will send you a message"}</p>
       <GridList
         cellHeight='auto'
         cols={2}
@@ -213,10 +218,10 @@ export default class PlayerRegister extends React.Component {
           </div>
         </GridTile>
         <GridTile>
-          <span className='span-labels'>Batting Average last season {parseFloat(battingAvg)}</span>
+          <span className='span-labels'>Batting Average last season {battingAvg.toFixed(3)}</span>
           <Slider
-            defaultValue={parseFloat(battingAvg)}
-            value={parseFloat(battingAvg)}
+            defaultValue={battingAvg.toFixed(3)}
+            value={battingAvg.toFixed(3)}
             style={{width: '80%'}}
             onChange={(e, newVal) => this.handleChangeBattingAvg(newVal)}
           />
