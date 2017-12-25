@@ -1,8 +1,7 @@
 class PlayersController < ApplicationController
   def index
-    auth_token = JSON.parse request.headers['token']
-    puts auth_token
-    if auth_token && authenticate_coach(auth_token)
+    auth_token = request.headers['token']
+    if auth_token != 'null' && authenticate_coach(auth_token)
       render json: Player.all
     else
       render json: {error: "Not Authenticated"}
