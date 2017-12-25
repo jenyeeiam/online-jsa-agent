@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   root to: 'home#index'
   resources :players, only: [:index, :create]
   resources :coaches, only: [:create]
-  resources :messages, only: [:create, :show]
+  resources :messages, only: [:index, :create]
 
   post '/coaches/login', to: 'coaches#login'
   post '/players/login', to: 'players#login'

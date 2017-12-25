@@ -41,7 +41,6 @@ class NewMessage extends React.Component {
         if(keys(response.data)[0] === 'error') {
           this.setState({error: response.data.error})
         } else {
-          console.log('made it')
           this.setState({messageText: '', success: true, error: ''})
         }
       }).catch(error => {
@@ -52,7 +51,6 @@ class NewMessage extends React.Component {
 
   render () {
     const {messageText, success, error} = this.state;
-    console.log(this.state)
     return (
       <div className='new-message'>
         {error && <p>{error}</p>}
