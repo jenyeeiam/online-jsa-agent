@@ -21,6 +21,11 @@ const positions = [
   'C'
 ];
 
+function validateEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email.toLowerCase());
+}
+
 export default class PlayerRegister extends React.Component {
   constructor(props) {
     super(props);
@@ -38,7 +43,8 @@ export default class PlayerRegister extends React.Component {
       era: 0.00,
       password: '',
       token: '',
-      error: ''
+      error: '',
+      success: false
     };
   }
 
@@ -86,8 +92,8 @@ export default class PlayerRegister extends React.Component {
     this.setState(state => ({ ...state, password: text}));
   }
 
-  handleValidateParams(team, email, password) {
-    return team.length > 0 && email.length > 0 && password.length > 5
+  handleValidateParams(name, email, password) {
+    return name.length > 0 && validateEmail(email) && password.length > 5
   }
 
   handleSubmit() {
@@ -102,34 +108,37 @@ export default class PlayerRegister extends React.Component {
       era,
       password
     } = this.state;
-    axios({
-      method: 'post',
-      url: '/players',
-      headers: {
-        "Content-Type": "application/json",
-        'X-Requested-With': 'XMLHttpRequest',
-        "X-CSRF-Token": document.getElementsByTagName("meta")[1].content
-      },
-      data: {
-        name,
-        position,
-        bats,
-        throws,
-        email,
-        alma_mater: almaMater,
-        accolades,
-        batting_avg: battingAvg,
-        era,
-        password
-      }
-    }).then((response) => {
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', 'player');
-    })
-      .catch((error) => {
-        console.log(error);
+    if(this.handleValidateParams(name, email, password)) {
+      axios({
+        method: 'post',
+        url: '/players',
+        headers: {
+          "Content-Type": "application/json",
+          'X-Requested-With': 'XMLHttpRequest',
+          "X-CSRF-Token": document.getElementsByTagName("meta")[1].content
+        },
+        data: {
+          name,
+          position: position.join(', '),
+          bats,
+          throws,
+          email,
+          alma_mater: almaMater,
+          accolades,
+          batting_avg: battingAvg,
+          era,
+          password
+        }
+      }).then((response) => {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', 'player');
+        this.setState({success: true})
+      }).catch((error) => {
+        this.setState({error: 'Profile unable to be saved 😢'})
       });
-
+    } else {
+      this.setState({error: 'Fill in all required fields 😤'})
+    }
   }
 
   render() {
@@ -143,11 +152,13 @@ export default class PlayerRegister extends React.Component {
       battingAvg,
       era,
       password,
-      error
+      error,
+      success
     } = this.state;
 
     return <div className="player-registration registration-form">
       {error.length > 0 && <h3>{error}</h3>}
+      {success && <Redirect to="/my-messages/players"/>}
       <h1>Create an Account</h1>
       <GridList
         cellHeight='auto'
@@ -166,7 +177,7 @@ export default class PlayerRegister extends React.Component {
         <GridTile>
           <TextField
             hintText="Email"
-            errorText={email.length > 0 ? '' : "This field is required"}
+            errorText={validateEmail(email) ? '' : "Provide a valid email"}
             onChange={(e, newVal) => this.handleChangeEmail(newVal)}
             value={email}
           />
@@ -249,7 +260,6 @@ export default class PlayerRegister extends React.Component {
           <TextField
             hintText="Accolades"
             multiLine={true}
-            rows={2}
             fullWidth={true}
             onChange={(e, newVal) => this.handleChangeAccolades(newVal)}
           />

@@ -5,6 +5,11 @@ import TextField from 'material-ui/TextField';
 import { Link, Redirect } from "react-router-dom";
 import axios from 'axios';
 
+function validateEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email.toLowerCase());
+}
+
 export default class CoachRegister extends React.Component {
   constructor(props) {
     super(props);
@@ -85,7 +90,7 @@ export default class CoachRegister extends React.Component {
         />
         <TextField
           hintText="Email"
-          errorText={email.length > 0 ? '' : "This field is required"}
+          errorText={validateEmail(email) ? '' : "Provide a valid email"}
           onChange={(e, newVal) => this.handleChangeEmail(newVal)}
           value={email}
         />
