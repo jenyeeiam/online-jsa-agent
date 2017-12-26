@@ -70,10 +70,10 @@ class MyMessages extends React.Component {
           <GridTile cols={2}>
             <div className='messages'>
               {mainContainerMsgs.map((msg, i) => {
+                let sender = msg.sender === 'coach' ? 'Me' : 'Player'
                 return (
                   <div key={i}>
-                    <h4>Sender: {moment(msg.created_at).format('ddd, MMM Do YYYY')}</h4>
-
+                    <h4>{`${sender} at ${moment(msg.created_at).format('ddd MMM Do YYYY, h:mm:ss a')}`}</h4>
                     <p>{msg.text}</p>
                   </div>
                 )
