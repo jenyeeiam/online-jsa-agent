@@ -9,8 +9,10 @@ import moment from 'moment';
 class MyMessages extends React.Component {
   constructor(props) {
     super(props);
+    this.handleSetVisibleMessages = this.handleSetVisibleMessages.bind(this);
     this.state = {
       messages: [],
+      playerMsgsVisible: 0,
       error: ''
     };
   }
@@ -32,12 +34,15 @@ class MyMessages extends React.Component {
     })
   }
 
+  handleSetVisibleMessages(index) {
+    this.setState({playerMsgsVisible: index})
+  }
+
   render () {
-    const {messages} = this.state;
+    const {messages, playerMsgsVisible} = this.state;
     const msgPreviews = [];
-    console.log(messages)
     const playerIds = uniqBy(messages, (p) => p.player_id).map(msg => msg.player_id);
-    const mainContainerMsgs = messages.filter(m => m.player_id === playerIds[0]);
+    const mainContainerMsgs = messages.filter(m => m.player_id === playerIds[playerMsgsVisible]);
     playerIds.forEach(id => {
       let firstMsg = findIndex(messages, (o) => o.player_id === id);
       msgPreviews.push(messages[firstMsg])
@@ -50,7 +55,11 @@ class MyMessages extends React.Component {
             <div className='msg-previews'>
               {msgPreviews.map((msg, i) => {
                 return(
-                  <Card key={msg.id}>
+                  <Card
+                    key={msg.id}
+                    onClick={() => this.handleSetVisibleMessages(i)}
+                    className={i === playerMsgsVisible ? 'active' : ''}
+                  >
                     <CardHeader
                       title={`Player ${msg.player_id}`}
                       subtitle={truncate(msg.text, {length: 50})}
@@ -69,6 +78,7 @@ class MyMessages extends React.Component {
           </GridTile>
           <GridTile cols={2}>
             <div className='messages'>
+              <h2>Player {playerIds[playerMsgsVisible]}</h2>
               {mainContainerMsgs.map((msg, i) => {
                 let sender = msg.sender === 'coach' ? 'Me' : 'Player'
                 return (
