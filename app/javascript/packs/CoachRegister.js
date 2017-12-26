@@ -10,6 +10,10 @@ function validateEmail(email) {
     return re.test(email.toLowerCase());
 }
 
+function validateParams(team, password) {
+  return team.length > 0 && password.length > 5
+}
+
 export default class CoachRegister extends React.Component {
   constructor(props) {
     super(props);
@@ -40,13 +44,13 @@ export default class CoachRegister extends React.Component {
     this.setState(state => ({ ...state, password: text}));
   }
 
-  handleValidateParams(team, email, password) {
-    return team.length > 0 && email.length > 0 && password.length > 5
-  }
-
   handleSubmit() {
     const {team, email, password} = this.state;
-    if(this.handleValidateParams(team, email, password)) {
+    if(!validateEmail(email)) {
+      this.setState({error: 'Provide a valid email'})
+    } else if (!validateParams(team, password)) {
+      this.setState({error: 'Fill in all required fields'})
+    } else {
       axios({
         method: 'post',
         url: '/coaches',
@@ -64,14 +68,10 @@ export default class CoachRegister extends React.Component {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', 'coach');
         this.setState({signedIn: true})
-      })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else {
-      this.setState({error: 'Please fill in all required fields'})
+      }).catch((error) => {
+        this.setState({error: 'Accont unable to be saved 😢'})
+      });
     }
-
   }
 
   render () {

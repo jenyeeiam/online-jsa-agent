@@ -26,6 +26,10 @@ function validateEmail(email) {
     return re.test(email.toLowerCase());
 }
 
+function validateParams(name, password) {
+  return name.length > 0 && password.length > 5
+}
+
 export default class PlayerRegister extends React.Component {
   constructor(props) {
     super(props);
@@ -92,10 +96,6 @@ export default class PlayerRegister extends React.Component {
     this.setState(state => ({ ...state, password: text}));
   }
 
-  handleValidateParams(name, email, password) {
-    return name.length > 0 && validateEmail(email) && password.length > 5
-  }
-
   handleSubmit() {
     const {name,
       position,
@@ -108,7 +108,12 @@ export default class PlayerRegister extends React.Component {
       era,
       password
     } = this.state;
-    if(this.handleValidateParams(name, email, password)) {
+
+    if(!validateEmail(email)) {
+      this.setState({error: 'Provide a valid email'})
+    } else if(!validateParams(name, password)) {
+      this.setState({error: 'Fill in all required fields'})
+    } else {
       axios({
         method: 'post',
         url: '/players',
@@ -136,8 +141,6 @@ export default class PlayerRegister extends React.Component {
       }).catch((error) => {
         this.setState({error: 'Profile unable to be saved 😢'})
       });
-    } else {
-      this.setState({error: 'Fill in all required fields 😤'})
     }
   }
 
@@ -252,12 +255,14 @@ export default class PlayerRegister extends React.Component {
         </GridTile>
         <GridTile>
           <TextField
+            value={almaMater}
             hintText="College"
             onChange={(e, newVal) => this.handleChangeAlmaMater(newVal)}
           />
         </GridTile>
         <GridTile cols={2}>
           <TextField
+            value={accolades}
             hintText="Accolades"
             multiLine={true}
             fullWidth={true}
