@@ -19,6 +19,16 @@ class PlayersController < ApplicationController
     end
   end
 
+  def login
+    if Player.find_by(email: params[:email]).try(:authenticate, params[:password])
+      payload = {data: params[:email]}
+      token = JWT.encode payload, nil, 'none'
+      render json: {token: token}
+    else
+      render json: {error: 'Incorrect email or password'}
+    end
+  end
+
   private
   def player_params
     params.permit(:name, :position, :bats, :throws, :email, :alma_mater, :accolades, :batting_avg, :era, :password)
