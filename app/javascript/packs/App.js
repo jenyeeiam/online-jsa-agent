@@ -11,7 +11,8 @@ import PlayerLogin from "./PlayerLogin";
 import PlayerRegister from "./PlayerRegister";
 import PlayerList from "./PlayerList";
 import NewMessage from "./NewMessage";
-import MyMessages from "./MyMessages";
+import MessagesCoaches from "./MessagesCoaches";
+import MessagesPlayers from "./MessagesPlayers";
 import createBrowserHistory from 'history/createBrowserHistory'
 
 const history = createBrowserHistory();
@@ -38,7 +39,8 @@ const App = () => (
         <Route exact path="/register/players" component={PlayerRegister}/>
         <Route exact path="/players-list" component={PlayerList}/>
         <Route exact path="/message/:player_id" component={NewMessage} />
-        <Route exact path="/my-messages" component={MyMessages} />
+        <Route exact path="/my-messages/coaches" component={MessagesCoaches} />
+        <Route exact path="/my-messages/players" component={MessagesPlayers} />
       </ErrorBoundary>
     </Router>
   </MuiThemeProvider>

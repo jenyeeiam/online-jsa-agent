@@ -38,7 +38,7 @@ export default class NavBar extends React.Component {
       </div>
         {signedIn && <div>
           <Link to='/' onClick={this.handleSignOut}><span className='logout-btn'>Logout</span></Link>
-          <Link to='/my-messages'><span className='logout-btn'>My Messages</span></Link>
+          <Link to='/my-messages/coaches'><span className='logout-btn'>My Messages</span></Link>
         </div>}
     </div>
   }

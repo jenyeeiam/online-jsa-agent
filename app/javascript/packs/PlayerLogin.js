@@ -62,7 +62,7 @@ class PlayerLogin extends React.Component {
     return (
       <div className="coach-registration registration-form">
         {error.length > 0 && <h3>{error}</h3>}
-        {signedIn && <Redirect to="/my-messages"/>}
+        {signedIn && <Redirect to="/my-messages/players"/>}
         <h1>Welcome Back</h1>
         <div className="text-fields">
           <TextField

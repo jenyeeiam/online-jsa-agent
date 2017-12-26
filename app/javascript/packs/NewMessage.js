@@ -54,7 +54,7 @@ class NewMessage extends React.Component {
     return (
       <div className='new-message'>
         {error && <p>{error}</p>}
-        {success && <Redirect to="/my-messages"/>}
+        {success && <Redirect to="/my-messages/coaches"/>}
         <h1>New Message</h1>
           <TextField
             hintText="Write here"
