@@ -7,6 +7,7 @@ import NavBar from "./NavBar";
 import Welcome from "./Welcome";
 import CoachRegister from "./CoachRegister";
 import CoachLogin from "./CoachLogin";
+import PlayerLogin from "./PlayerLogin";
 import PlayerRegister from "./PlayerRegister";
 import PlayerList from "./PlayerList";
 import NewMessage from "./NewMessage";
@@ -33,6 +34,7 @@ const App = () => (
         <Route exact path="/" component={Welcome}/>
         <Route exact path="/register/coaches" component={CoachRegister}/>
         <Route exact path="/login/coaches" component={CoachLogin}/>
+        <Route exact path="/login/players" component={PlayerLogin}/>
         <Route exact path="/register/players" component={PlayerRegister}/>
         <Route exact path="/players-list" component={PlayerList}/>
         <Route exact path="/message/:player_id" component={NewMessage} />
