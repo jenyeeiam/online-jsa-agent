@@ -35,11 +35,17 @@ export default class PlayerList extends React.Component {
       {error && <p>{error}</p>}
       {players.map((player, index) => {
         let subtitle = `Bats/Throws: ${player.bats}/${player.throws} | `;
-        if(player.position === 'P') {
-          subtitle += `ERA: ${player.era}`
-        } else {
-          subtitle += `AVG: ${player.batting_avg}`
+        subtitle += `AVG: ${player.batting_avg}`
+        if(/P/.test(player.position)) {
+          subtitle += ` | ERA: ${player.era}`
         }
+        //if player has more than one position
+        let position = player.position;
+        if(/,/.test(position)) {
+          let positionArray = position.split(',');
+          position = positionArray[0]
+        }
+
         return (
           <Card key={player.id}>
             <CardHeader
@@ -50,7 +56,7 @@ export default class PlayerList extends React.Component {
                 backgroundColor={'#542e68'}
                 size={50}
             >
-                {player.position || 'N/A'}
+                {position || 'N/A'}
               </Avatar>}
             />
             <CardTitle title={`Player ${player.id}`} subtitle={`College: ${player.alma_mater}`} />
