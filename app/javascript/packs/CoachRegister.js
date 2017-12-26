@@ -76,6 +76,7 @@ export default class CoachRegister extends React.Component {
       <h1>Create an Account</h1>
       <div className="text-fields">
         <TextField
+          autoFocus={true}
           hintText="Team"
           errorText={team.length > 0 ? '' : "This field is required"}
           onChange={(e, newVal) => this.handleChangeTeam(newVal)}

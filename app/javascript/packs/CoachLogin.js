@@ -66,6 +66,7 @@ class CoachLogin extends React.Component {
         <h1>Welcome Back</h1>
         <div className="text-fields">
           <TextField
+            autoFocus={true}
             hintText="Email"
             onChange={(e, newVal) => this.handleChangeEmail(newVal)}
             value={email}

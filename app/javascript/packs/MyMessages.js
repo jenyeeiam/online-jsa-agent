@@ -146,6 +146,7 @@ class MyMessages extends React.Component {
               <div className="text-input">
                 <TextField
                   value={message}
+                  autoFocus={true}
                   hintText="Type a message..."
                   multiLine={true}
                   fullWidth={true}

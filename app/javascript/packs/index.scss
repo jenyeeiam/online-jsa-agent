@@ -157,13 +157,13 @@ body {
     padding: 0 15px 15px 15px;
     .messages {
       padding: 10px;
-      height: 45% !important;
+      height: 57vh !important;
       overflow: auto;
       display: flex;
       flex-direction: column-reverse;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-      .text-input > * {
-        display: inline-grid;
+      .text-input {
+        width: 100%;
       }
     }
   }

@@ -155,6 +155,7 @@ export default class PlayerRegister extends React.Component {
       >
         <GridTile>
           <TextField
+            autoFocus={true}
             hintText="Name"
             errorText={name.length > 0 ? '' : "This field is required"}
             onChange={(e, newVal) => this.handleChangeName(newVal)}

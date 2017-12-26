@@ -13,7 +13,7 @@ class MessagesController < ApplicationController
 
   def create
     coach = authenticate_coach params[:auth_token]
-    message = Message.new(coach_id: coach.id, player_id: params[:player_id], text: params[:message_text])
+    message = Message.new(coach_id: coach.id, player_id: params[:player_id], text: params[:message_text], sender: 'coach')
     if message.save
       render json: {success: 'Success!'}
     else
