@@ -45,6 +45,7 @@ class PlayerLogin extends React.Component {
           this.setState({error: response.data.error})
         } else {
           localStorage.setItem('token', response.data.token);
+          localStorage.setItem('user', 'player');
           this.setState({signedIn: true})
         }
       })

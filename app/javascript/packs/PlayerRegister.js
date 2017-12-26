@@ -123,7 +123,8 @@ export default class PlayerRegister extends React.Component {
         password
       }
     }).then((response) => {
-      localStorage.setItem('token', response.data.token)
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', 'player');
     })
       .catch((error) => {
         console.log(error);

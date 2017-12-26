@@ -45,7 +45,8 @@ class CoachLogin extends React.Component {
           this.setState({error: response.data.error})
         } else {
           localStorage.setItem('token', response.data.token);
-          this.setState({signedIn: true})
+          localStorage.setItem('user', 'coach');
+          this.setState({signedIn: true});
         }
       })
         .catch((error) => {

@@ -56,7 +56,8 @@ export default class CoachRegister extends React.Component {
           password
         }
       }).then((response) => {
-        localStorage.setItem('token', response.data.token)
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', 'coach');
         this.setState({signedIn: true})
       })
         .catch((error) => {
