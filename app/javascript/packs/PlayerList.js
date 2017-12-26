@@ -53,7 +53,7 @@ export default class PlayerList extends React.Component {
                 {player.position || 'N/A'}
               </Avatar>}
             />
-          <CardTitle title={`Player ${player.id}`} subtitle={`College: ${player.alma_mater}`} />
+            <CardTitle title={`Player ${player.id}`} subtitle={`College: ${player.alma_mater}`} />
             <CardText>
               {player.accolades}
             </CardText>
