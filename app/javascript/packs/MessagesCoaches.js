@@ -126,7 +126,7 @@ class MessagesCoaches extends React.Component {
                   >
                     <CardHeader
                       title={`Player ${msg.player_id}`}
-                      subtitle={truncate(msg.text, {length: 50})}
+                      subtitle={truncate(msg.japanese_text, {length: 50})}
                       avatar={<Avatar
                         color={'#ffbc49'}
                         backgroundColor={'#542e68'}
@@ -165,7 +165,8 @@ class MessagesCoaches extends React.Component {
                 return (
                   <div key={i}>
                     <h4>{`${sender} at ${moment(msg.created_at).format('ddd MMM Do YYYY, h:mm:ss a')}`}</h4>
-                    <p>{msg.text}</p>
+                    <p>{msg.japanese_text}</p>
+                    <p className='japanese-text'>{msg.text}</p>
                   </div>
                 )
               })}
