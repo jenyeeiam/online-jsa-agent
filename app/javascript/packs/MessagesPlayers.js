@@ -114,7 +114,7 @@ class MessagesPlayers extends React.Component {
 
     return (
       <div className='my-messages'>
-        {messages.length === 0 && <h1>No messages yet. When a coach would like to contact you. You will recieve an email from us.</h1>}
+        {messages.length === 0 && <h1>No messages yet. When a coach has messaged you, you will recieve an email from us.</h1>}
         {messages.length > 0 && <div>
           <GridList cols={3} cellHeight='auto' padding={5}>
             <GridTile cols={1}>

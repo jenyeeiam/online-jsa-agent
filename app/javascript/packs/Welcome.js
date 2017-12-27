@@ -3,6 +3,7 @@ import RaisedButton from "material-ui/RaisedButton";
 import FlatButton from "material-ui/FlatButton";
 import Divider from 'material-ui/Divider';
 import { Link } from "react-router-dom";
+import InfoPage from "./InfoPage";
 
 const buttonStyle = {
   height: '60px',
@@ -31,9 +32,11 @@ export default class Welcome extends React.Component {
 
   render() {
     const {descriptionVisible} = this.state;
+    const signedIn = !!localStorage.getItem('token');
 
     return <div className="welcome-container">
-      <div className="login-register">
+      {signedIn && <InfoPage/>}
+      {!signedIn &&<div className="login-register">
         <h1>connecting japanese professional softball teams with foreign players</h1>
         {!descriptionVisible && <p className="fake-button">
           <span onClick={this.handleClick}>How does it work?</span>
@@ -65,7 +68,7 @@ export default class Welcome extends React.Component {
             </Link>
           </div>
         </div>
-      </div>
+      </div>}
     </div>
   }
 

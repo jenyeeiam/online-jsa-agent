@@ -64,6 +64,11 @@ body {
     text-transform: uppercase;
     margin: 0 auto;
     border-radius: 10px;
+    .info {
+      text-align: left;
+      text-transform: none;
+      padding: 0 20px;
+    }
     .fake-button {
       color: $pink;
       margin-bottom: 20px;
