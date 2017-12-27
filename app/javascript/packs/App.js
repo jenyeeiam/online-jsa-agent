@@ -6,8 +6,7 @@ import ErrorBoundary from "./ErrorBoundary";
 import NavBar from "./NavBar";
 import Welcome from "./Welcome";
 import CoachRegister from "./CoachRegister";
-import CoachLogin from "./CoachLogin";
-import PlayerLogin from "./PlayerLogin";
+import Login from "./Login";
 import PlayerRegister from "./PlayerRegister";
 import PlayerList from "./PlayerList";
 import NewMessage from "./NewMessage";
@@ -34,13 +33,12 @@ const App = () => (
         <Route path="/" component={NavBar}/>
         <Route exact path="/" component={Welcome}/>
         <Route exact path="/register/coaches" component={CoachRegister}/>
-        <Route exact path="/login/coaches" component={CoachLogin}/>
-        <Route exact path="/login/players" component={PlayerLogin}/>
+        <Route exact path="/login" component={Login}/>
         <Route exact path="/register/players" component={PlayerRegister}/>
         <Route exact path="/players-list" component={PlayerList}/>
         <Route exact path="/message/:player_id" component={NewMessage} />
-        <Route exact path="/my-messages/coaches" component={MessagesCoaches} />
-        <Route exact path="/my-messages/players" component={MessagesPlayers} />
+        <Route exact path="/my-messages/coach" component={MessagesCoaches} />
+        <Route exact path="/my-messages/player" component={MessagesPlayers} />
       </ErrorBoundary>
     </Router>
   </MuiThemeProvider>

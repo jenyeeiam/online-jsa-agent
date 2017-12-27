@@ -6,7 +6,7 @@ import { Link, Redirect } from "react-router-dom";
 import {keys} from "lodash";
 import axios from 'axios';
 
-class CoachLogin extends React.Component {
+class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,7 +30,7 @@ class CoachLogin extends React.Component {
     if(email.length > 0 && password.length > 0) {
       axios({
         method: 'post',
-        url: '/coaches/login',
+        url: '/login',
         headers: {
           "Content-Type": "application/json",
           'X-Requested-With': 'XMLHttpRequest',
@@ -45,8 +45,8 @@ class CoachLogin extends React.Component {
           this.setState({error: response.data.error})
         } else {
           localStorage.setItem('token', response.data.token);
-          localStorage.setItem('user', 'coach');
-          this.setState({signedIn: true});
+          localStorage.setItem('user', response.data.user);
+          this.setState({signedIn: true})
         }
       })
         .catch((error) => {
@@ -63,7 +63,7 @@ class CoachLogin extends React.Component {
     return (
       <div className="coach-registration registration-form">
         {error.length > 0 && <h3>{error}</h3>}
-        {signedIn && <Redirect to="/players-list"/>}
+        {signedIn && <Redirect to={`/my-messages/${localStorage.getItem('user')}`} />}
         <h1>Welcome Back</h1>
         <div className="text-fields">
           <TextField
@@ -98,4 +98,4 @@ class CoachLogin extends React.Component {
   }
 }
 
-export default CoachLogin;
+export default Login;

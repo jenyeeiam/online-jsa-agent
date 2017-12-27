@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   post '/coaches/login', to: 'coaches#login'
   post '/players/login', to: 'players#login'
+  post '/login', to: 'sessions#login'
 
   get '*path', to: 'home#index'
 end

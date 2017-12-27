@@ -64,27 +64,6 @@ export default class Welcome extends React.Component {
               />
             </Link>
           </div>
-          <h3>Login</h3>
-          <div className="login-btn">
-            <Link to="/login/players">
-              <RaisedButton
-                label="Players"
-                primary={true}
-                style={buttonStyle}
-                labelStyle={labelStyle}
-              />
-            </Link>
-          </div>
-          <div className="login-btn">
-            <Link to="/login/coaches">
-              <RaisedButton
-                label="Coaches"
-                secondary={true}
-                style={buttonStyle}
-                labelStyle={labelStyle}
-              />
-            </Link>
-          </div>
         </div>
       </div>
     </div>
