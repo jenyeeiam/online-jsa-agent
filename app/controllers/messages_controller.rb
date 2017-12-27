@@ -47,7 +47,7 @@ class MessagesController < ApplicationController
         puts e.response
       end
       # send email to coach
-      send_email(Player.find(params[:coach_id]), user, translation)
+      send_email(Coach.find(params[:coach_id]), user, translation)
       message = Message.new(coach_id: params[:coach_id], player_id: user.id, text: params[:message_text], japanese_text: translation, sender: 'player')
     end
     if message.save

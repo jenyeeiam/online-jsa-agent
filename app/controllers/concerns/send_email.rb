@@ -7,7 +7,7 @@ module SendEmail
   def send_email(recipient, sender, text)
     from = Email.new(email: 'no-reply@nippon-softball.com')
     to = Email.new(email: recipient.email)
-    subject = "You've recieved a message from #{sender.class.to_s} #{sender.id}"
+    subject = "You've received a message from #{sender.class.to_s} #{sender.id}"
     content = Content.new(type: 'text/plain', value: text)
     mail = Mail.new(from, subject, to, content)
 
