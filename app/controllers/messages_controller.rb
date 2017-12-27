@@ -1,5 +1,6 @@
 class MessagesController < ApplicationController
   include GenerateXml
+  include SendEmail
 
   def check_user_type(token)
     authenticate_coach(token) || authenticate_player(token)
@@ -7,6 +8,7 @@ class MessagesController < ApplicationController
 
   def index
     user = check_user_type params[:auth_token]
+    puts user
     if user.is_a? Coach
       render json: user.messages.order(id: :desc)
     else
@@ -28,6 +30,8 @@ class MessagesController < ApplicationController
       rescue RestClient::ExceptionWithResponse => e
         puts e.response
       end
+      # send notification email to player
+      send_email(Player.find(params[:player_id]), user, translation)
       message = Message.new(coach_id: user.id, player_id: params[:player_id], japanese_text: params[:message_text], text: translation, sender: 'coach')
     else
       # assuming english to japanese
@@ -42,6 +46,8 @@ class MessagesController < ApplicationController
       rescue RestClient::ExceptionWithResponse => e
         puts e.response
       end
+      # send email to coach
+      send_email(Player.find(params[:coach_id]), user, translation)
       message = Message.new(coach_id: params[:coach_id], player_id: user.id, text: params[:message_text], japanese_text: translation, sender: 'player')
     end
     if message.save

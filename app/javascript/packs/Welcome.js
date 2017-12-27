@@ -67,7 +67,7 @@ export default class Welcome extends React.Component {
           <h3>Login</h3>
           <div className="login-btn">
             <Link to="/login/players">
-              <FlatButton
+              <RaisedButton
                 label="Players"
                 primary={true}
                 style={buttonStyle}
@@ -77,7 +77,7 @@ export default class Welcome extends React.Component {
           </div>
           <div className="login-btn">
             <Link to="/login/coaches">
-              <FlatButton
+              <RaisedButton
                 label="Coaches"
                 secondary={true}
                 style={buttonStyle}

@@ -166,7 +166,7 @@ class MessagesPlayers extends React.Component {
                   let sender = msg.sender === 'player' ? 'Me' : 'Coach'
                   return (
                     <div key={i}>
-                      <h4>{`${sender} at ${moment(msg.created_at).format('ddd MMM Do YYYY, h:mm:ss a')}`}</h4>
+                      <h4 className='sender-datetime'>{`${sender} at ${moment(msg.created_at).format('ddd MMM Do YYYY, h:mm:ss a')}`}</h4>
                       <p>{msg.text}</p>
                       <p className='japanese-text'>{msg.japanese_text}</p>
                     </div>
