@@ -63,7 +63,7 @@ class Login extends React.Component {
     return (
       <div className="coach-registration registration-form">
         {error.length > 0 && <h3>{error}</h3>}
-        {signedIn && <Redirect to={`/my-messages/${localStorage.getItem('user')}`} />}
+        {signedIn && <Redirect to={localStorage.getItem('user') === 'player' ? '/my-messages/player' : '/players-list'} />}
         <h1>Welcome Back</h1>
         <div className="text-fields">
           <TextField
