@@ -37,7 +37,7 @@ class Login extends React.Component {
           "X-CSRF-Token": document.getElementsByTagName("meta")[1].content
         },
         data: {
-          email,
+          email: email.toLowerCase(),
           password
         }
       }).then((response) => {

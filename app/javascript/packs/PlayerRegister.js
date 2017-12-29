@@ -127,7 +127,7 @@ export default class PlayerRegister extends React.Component {
           position: position.join(', '),
           bats,
           throws,
-          email,
+          email: email.toLowerCase(),
           alma_mater: almaMater,
           accolades,
           batting_avg: battingAvg,

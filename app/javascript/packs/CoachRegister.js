@@ -61,7 +61,7 @@ export default class CoachRegister extends React.Component {
         },
         data: {
           team,
-          email,
+          email: email.toLowerCase(),
           password
         }
       }).then((response) => {
