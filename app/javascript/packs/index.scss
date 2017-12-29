@@ -115,14 +115,62 @@ body {
 
 .player-registration {
   text-align: left;
-  width: 750px;
+  width: 75%;
   .signup-btns {
     margin-top: 25px;
   }
   .span-labels {
     color: #aaa;
   }
+  .player-info {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-areas:
+          "n n n e e e"
+          "p p p p p p";
+    .name {
+      grid-area: n;
+    }
+    .email {
+      grid-area: e;
+    }
+    .password {
+      grid-area: p;
+    }
+  }
+  .player-merits {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-areas:
+          "b b t t po po"
+          "av av av er er er"
+          "c c c c c c"
+          "a a a a a a";
+    .bats {
+      grid-area: b;
+    }
+    .throws {
+      grid-area: t;
+    }
+    .position {
+      grid-area: po;
+    }
+    .avg {
+      grid-area: av;
+    }
+    .era {
+      grid-area: er;
+    }
+    .college {
+      grid-area: c;
+    }
+    .accolades {
+      grid-area: a;
+    }
+  }
 }
+
+
 //******************************************//
 
 //****PLAYERS LIST*****************************//

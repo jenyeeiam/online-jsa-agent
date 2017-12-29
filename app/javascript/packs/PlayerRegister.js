@@ -163,12 +163,8 @@ export default class PlayerRegister extends React.Component {
       {error.length > 0 && <h3>{error}</h3>}
       {success && <Redirect to="/my-messages/player"/>}
       <h1>Create an Account</h1>
-      <GridList
-        cellHeight='auto'
-        cols={2}
-        padding={6}
-      >
-        <GridTile>
+      <div className="player-info">
+        <div className="name">
           <TextField
             autoFocus={true}
             hintText="Name"
@@ -176,16 +172,16 @@ export default class PlayerRegister extends React.Component {
             onChange={(e, newVal) => this.handleChangeName(newVal)}
             value={name}
           />
-        </GridTile>
-        <GridTile>
+        </div>
+        <div className="email">
           <TextField
             hintText="Email"
             errorText={validateEmail(email) ? '' : "Provide a valid email"}
             onChange={(e, newVal) => this.handleChangeEmail(newVal)}
             value={email}
           />
-        </GridTile>
-        <GridTile>
+        </div>
+        <div className="password">
           <TextField
             hintText="Password"
             errorText={password.length > 5 ? '' : "Must be 6 or more characters"}
@@ -193,57 +189,56 @@ export default class PlayerRegister extends React.Component {
             onChange={(e, newVal) => this.handleChangePassword(newVal)}
             value={password}
           />
-        </GridTile>
-      </GridList>
+        </div>
+      </div>
       <h1>Player Information</h1>
       <p>{"These fields are not required, but it is encouraged to be as detailed as possible. Japanese coaches are not aware of players' names and will contact you based on the merit you outline here. If a coach is interested in you they will send you a message"}</p>
-      <GridList
-        cellHeight='auto'
-        cols={2}
-        padding={6}
-      >
-        <GridTile cols={2}>
-          <div className='bats-throws-picker'>
-            <SelectField
-              value={bats}
-              floatingLabelText="Bats"
-              onChange={this.handleChangeBats}
-              style={{width: '30%', marginRight: '10px'}}
-            >
-              <MenuItem value={'R'} primaryText="Right" />
-              <MenuItem value={'L'} primaryText="Left" />
-            </SelectField>
-            <SelectField
-              value={throws}
-              floatingLabelText="Throws"
-              onChange={this.handleChangeThrows}
-              style={{width: '30%', marginRight: '10px'}}
-            >
-              <MenuItem value={'R'} primaryText="Right" />
-              <MenuItem value={'L'} primaryText="Left" />
-            </SelectField>
-            <SelectField
-              value={position}
-              floatingLabelText="Position(s)"
-              onChange={this.handleChangePosition}
-              style={{width: '30%'}}
-              multiple={true}
-            >
-              {positions.map((pos, i) => <MenuItem key={i} value={pos} primaryText={pos} />)}
-            </SelectField>
-          </div>
-        </GridTile>
-        <GridTile>
+      <div className='player-merits'>
+        <div className='bats'>
+          <SelectField
+            value={bats}
+            floatingLabelText="Bats"
+            onChange={this.handleChangeBats}
+            style={{width: '30%', marginRight: '10px'}}
+          >
+            <MenuItem value={'R'} primaryText="Right" />
+            <MenuItem value={'L'} primaryText="Left" />
+          </SelectField>
+        </div>
+        <div className='throws'>
+          <SelectField
+            value={throws}
+            floatingLabelText="Throws"
+            onChange={this.handleChangeThrows}
+            style={{width: '30%', marginRight: '10px'}}
+          >
+            <MenuItem value={'R'} primaryText="Right" />
+            <MenuItem value={'L'} primaryText="Left" />
+          </SelectField>
+        </div>
+        <div className='position'>
+          <SelectField
+            value={position}
+            floatingLabelText="Position(s)"
+            onChange={this.handleChangePosition}
+            style={{width: '30%'}}
+            multiple={true}
+          >
+            {positions.map((pos, i) => <MenuItem key={i} value={pos} primaryText={pos} />)}
+          </SelectField>
+        </div>
+        <div className="avg">
           <span className='span-labels'>Batting Average last season {battingAvg.toFixed(3)}</span>
           <Slider
             defaultValue={battingAvg}
             value={battingAvg}
             step={0.001}
             style={{width: '80%'}}
+            max={0.7}
             onChange={(e, newVal) => this.handleChangeBattingAvg(newVal)}
           />
-        </GridTile>
-        <GridTile>
+        </div>
+        <div className="era">
           <span className='span-labels'>ERA last season {era}</span>
           <Slider
             defaultValue={0}
@@ -252,15 +247,15 @@ export default class PlayerRegister extends React.Component {
             style={{width: '80%'}}
             onChange={(e, newVal) => this.handleChangeEra(newVal)}
           />
-        </GridTile>
-        <GridTile>
+        </div>
+        <div className="college">
           <TextField
             value={almaMater}
             hintText="College"
             onChange={(e, newVal) => this.handleChangeAlmaMater(newVal)}
           />
-        </GridTile>
-        <GridTile cols={2}>
+        </div>
+        <div className="accolades">
           <TextField
             value={accolades}
             hintText="Accolades"
@@ -268,8 +263,8 @@ export default class PlayerRegister extends React.Component {
             fullWidth={true}
             onChange={(e, newVal) => this.handleChangeAccolades(newVal)}
           />
-        </GridTile>
-      </GridList>
+        </div>
+      </div>
       <div className='signup-btns'>
         <RaisedButton
           label="Sign Up"

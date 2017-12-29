@@ -5,3 +5,50 @@
     }
   }
 }
+
+@media screen and (max-width: 500px) {
+  .coach-registration {
+    width: 100%;
+  }
+  .player-registration {
+    width: 100%;
+    .player-info {
+      grid-template-areas:
+            "n n n n n n"
+            "e e e e e e"
+            "p p p p p p";
+    }
+    .player-merits {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-areas:
+            "b b b t t t"
+            "po po po po po po"
+            "av av av av av av"
+            "er er er er er er"
+            "c c c c c c"
+            "a a a a a a";
+      .bats {
+        grid-area: b;
+      }
+      .throws {
+        grid-area: t;
+      }
+      .position {
+        grid-area: po;
+      }
+      .avg {
+        grid-area: av;
+      }
+      .era {
+        grid-area: er;
+      }
+      .college {
+        grid-area: c;
+      }
+      .accolades {
+        grid-area: a;
+      }
+    }
+  }
+}
