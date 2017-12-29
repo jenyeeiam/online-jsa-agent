@@ -54,13 +54,14 @@ class NewMessage extends React.Component {
     return (
       <div className='new-message'>
         {error && <p>{error}</p>}
-        {success && <Redirect to="/my-messages/coaches"/>}
+        {success && <Redirect to="/my-messages/coach"/>}
         <h1>New Message</h1>
           <TextField
             hintText="Write here"
             multiLine={true}
             fullWidth={true}
             onChange={(e, newVal) => this.handleChange(newVal)}
+            onKeyPress={(ev) => {if(ev.key === 'Enter') {this.handleSubmit()}}}
           />
         <RaisedButton
           label='Send'

@@ -161,7 +161,7 @@ export default class PlayerRegister extends React.Component {
 
     return <div className="player-registration registration-form">
       {error.length > 0 && <h3>{error}</h3>}
-      {success && <Redirect to="/my-messages/players"/>}
+      {success && <Redirect to="/my-messages/player"/>}
       <h1>Create an Account</h1>
       <GridList
         cellHeight='auto'

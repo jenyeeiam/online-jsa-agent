@@ -39,7 +39,7 @@ export default class NavBar extends React.Component {
         {!signedIn && <Link to="/login"><span className='logout-btn'>Login</span></Link>}
         {signedIn && <div>
           <Link to='/' onClick={this.handleSignOut}><span className='logout-btn'>Logout</span></Link>
-          <Link to='/my-messages/coaches'><span className='logout-btn'>My Messages</span></Link>
+          <Link to={`/my-messages/${localStorage.getItem('user')}`}><span className='logout-btn'>My Messages</span></Link>
           {localStorage.getItem('user') === 'coach' && <Link to='/players-list'><span className='logout-btn'>Players</span></Link>}
         </div>}
     </div>

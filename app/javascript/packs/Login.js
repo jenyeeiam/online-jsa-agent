@@ -77,6 +77,7 @@ class Login extends React.Component {
             onChange={(e, newVal) => this.handleChangePassword(newVal)}
             value={password}
             type="password"
+            onKeyPress={(ev) => {if(ev.key === 'Enter') {this.handleSubmit()}}}
           />
         </div>
         <div className="btns">
