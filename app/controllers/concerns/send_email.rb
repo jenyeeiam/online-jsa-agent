@@ -8,7 +8,8 @@ module SendEmail
     from = Email.new(email: 'no-reply@nippon-softball.com')
     to = Email.new(email: recipient.email)
     subject = "You've received a message from #{sender.class.to_s} #{sender.id}"
-    content = Content.new(type: 'text/plain', value: text)
+    html_content = "<p>#{text}</p><p><a href='https://jsa-agent.herokuapp.com'>Login</a> to your account to reply</p>"
+    content = Content.new(type: 'text/html', value: html_content)
     mail = Mail.new(from, subject, to, content)
 
     sg = SendGrid::API.new(api_key: Rails.application.secrets['sendgrid_api_key'])
