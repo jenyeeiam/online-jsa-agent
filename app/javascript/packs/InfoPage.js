@@ -12,6 +12,8 @@ const InfoPage = () => {
       <p className="info">All translations are provided by Bing Translate. Yes, we realize they are not perfect, but the messages are intended as a first introduction between parties. If the team and player are mutually interested, we will provide an interpreter to conduct more intensive communication.</p>
       <h3>{"Why aren't players' and coaches' names included?"}</h3>
       <p className="info">Names are not included to provide objectivity between players and coaches. Players are evaluated solely on the merits and accolades provided.</p>
+      <h3>I provided all my stats and accolades, and no one has contacted me!</h3>
+      <p className="info">Unfortunately there are not many available spots for foreign players in Japan. The highest demand is for pitchers and catchers but occasionally teams will recruit a positional player and good hitter. Nippon softball was created to speed up the recruiting process for Japanese professional teams and the unfortunate reality is that not every player who would like to play in Japan will be able to.</p>
     </div>
   )
 }
