@@ -1,4 +1,5 @@
 class PlayersController < ApplicationController
+  include GenerateXml
   def index
     auth_token = request.headers['token']
     if auth_token != 'null' && authenticate_coach(auth_token)
@@ -11,6 +12,20 @@ class PlayersController < ApplicationController
   def create
     player = Player.new player_params
     if player.save
+      # translate the accolades
+      begin
+        res = RestClient.post("https://api.microsofttranslator.com/V2/Http.svc/TranslateArray", generate_xml('ja', 'en', params[:accolades]), headers={'Ocp-Apim-Subscription-Key': Rails.application.secrets['jsa_key'], 'Content-Type': 'application/xml'})
+        if res.code == 200
+          parsed_response = Nokogiri::HTML(res.body)
+          translation = parsed_response.children[1].children.first.children.first.children.first.children[2].children.text
+        else
+          translation = 'Failed Translation'
+        end
+        player.japanese_accolades = translation
+        player.save
+      rescue RestClient::ExceptionWithResponse => e
+        puts e.response
+      end
       payload = {data: player.email}
       token = JWT.encode payload, nil, 'none'
       render json: {token: token}
