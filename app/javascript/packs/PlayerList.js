@@ -61,7 +61,8 @@ export default class PlayerList extends React.Component {
             />
             <CardTitle title={`Player ${player.id}`} subtitle={`College: ${player.alma_mater}`} />
             <CardText>
-              {player.accolades}
+              <p>{player.accolades}</p>
+              <p>{player.japanese_accolades}</p>
             </CardText>
             <CardActions>
               <Link to={`/message/${player.id}`}>
