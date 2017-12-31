@@ -21,8 +21,7 @@ class PlayersController < ApplicationController
         else
           translation = 'Failed Translation'
         end
-        player.japanese_accolades = translation
-        player.save
+        Player.last.update_attributes({japanese_accolades: translation})
       rescue RestClient::ExceptionWithResponse => e
         puts e.response
       end
