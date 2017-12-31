@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { Link } from "react-router-dom";
 import {GridList, GridTile} from 'material-ui/GridList';
 import RaisedButton from "material-ui/RaisedButton";
 import {Card, CardActions, CardHeader, CardTitle, CardText} from 'material-ui/Card';
@@ -154,7 +155,13 @@ class MessagesCoaches extends React.Component {
     return (
       <div className='my-messages'>
         {!msgPreviewDisplay && <h3 className="msg-backbtn" onClick={this.handleToggleMsgContainers}>Back</h3>}
-        <GridList cols={3} cellHeight='auto' padding={5}>
+        {messages.length === 0 && <div>
+          <h2>No messages yet. Communicate with a player by sending her a message! </h2>
+          <Link to="/players-list">
+            <RaisedButton label="Players Page" primary={true}/>
+          </Link>
+        </div>}
+        {messages.length > 0 && <GridList cols={3} cellHeight='auto' padding={5}>
           <GridTile
             cols={msgContainerDisplay ? 1 : 3}
             style={{display: msgPreviewDisplay ? 'block' : 'none'}}
@@ -220,7 +227,7 @@ class MessagesCoaches extends React.Component {
 
             </div>
           </GridTile>
-        </GridList>
+        </GridList>}
       </div>
     )
   }
