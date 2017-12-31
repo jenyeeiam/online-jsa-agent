@@ -48,11 +48,9 @@ class MessagesPlayers extends React.Component {
     if(window.innerWidth < 700) {
       this.setState({msgContainerDisplay: false});
       this.setState({msgPreviewDisplay: true});
-      this.setState({previewColumns: 3});
     } else {
       this.setState({msgContainerDisplay: true});
       this.setState({msgPreviewDisplay: true});
-      this.setState({previewColumns: 1})
     }
   }
 
@@ -81,11 +79,9 @@ class MessagesPlayers extends React.Component {
     if(window.innerWidth < 700) {
       this.setState({msgContainerDisplay: false});
       this.setState({msgPreviewDisplay: true});
-      this.setState({previewColumns: 3});
     } else {
       this.setState({msgContainerDisplay: true});
       this.setState({msgPreviewDisplay: true});
-      this.setState({previewColumns: 1});
     }
   }
 
@@ -145,7 +141,7 @@ class MessagesPlayers extends React.Component {
   }
 
   render () {
-    const {messages, coachMsgsVisible, message, windowWidth, msgContainerDisplay, msgPreviewDisplay, previewColumns} = this.state;
+    const {messages, coachMsgsVisible, message, windowWidth, msgContainerDisplay, msgPreviewDisplay} = this.state;
     // array to hold the first message for each unique message stream
     const msgPreviews = [];
       // unique player ids
