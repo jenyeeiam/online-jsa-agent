@@ -29,13 +29,35 @@ class MessagesPlayers extends React.Component {
     super(props);
     this.handleSetVisibleMessages = this.handleSetVisibleMessages.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleResize = this.handleResize.bind(this);
+    this.handleToggleMsgContainers = this.handleToggleMsgContainers.bind(this);
 
     this.state = {
       messages: [],
       coachMsgsVisible: 0,
       message: '',
-      error: ''
+      error: '',
+      windowWidth: ''
     };
+  }
+
+  componentDidMount() {
+    this.handleFetchMessages();
+    window.addEventListener('resize', this.handleResize);
+    this.setState({windowWidth: window.innerWidth});
+    if(window.innerWidth < 700) {
+      this.setState({msgContainerDisplay: false});
+      this.setState({msgPreviewDisplay: true});
+      this.setState({previewColumns: 3});
+    } else {
+      this.setState({msgContainerDisplay: true});
+      this.setState({msgPreviewDisplay: true});
+      this.setState({previewColumns: 1})
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
   }
 
   handleFetchMessages() {
@@ -54,16 +76,39 @@ class MessagesPlayers extends React.Component {
     })
   }
 
-  componentDidMount() {
-    this.handleFetchMessages()
+  handleResize() {
+    this.setState({windowWidth: window.innerWidth});
+    if(window.innerWidth < 700) {
+      this.setState({msgContainerDisplay: false});
+      this.setState({msgPreviewDisplay: true});
+      this.setState({previewColumns: 3});
+    } else {
+      this.setState({msgContainerDisplay: true});
+      this.setState({msgPreviewDisplay: true});
+      this.setState({previewColumns: 1});
+    }
   }
 
   handleSetVisibleMessages(index) {
+    const {windowWidth} = this.state;
+    if(windowWidth < 700) {
+      this.setState({msgContainerDisplay: true});
+      this.setState({msgPreviewDisplay: false});
+    }
+
     this.setState({coachMsgsVisible: index})
   }
 
   handleChange(text) {
     this.setState({message: text})
+  }
+
+  handleToggleMsgContainers() {
+    const {msgContainerDisplay, msgPreviewDisplay, windowWidth} = this.state;
+    this.setState({
+      msgPreviewDisplay: !msgPreviewDisplay,
+      msgContainerDisplay: !msgContainerDisplay
+    })
   }
 
   handleSubmit() {
@@ -100,7 +145,7 @@ class MessagesPlayers extends React.Component {
   }
 
   render () {
-    const {messages, coachMsgsVisible, message} = this.state;
+    const {messages, coachMsgsVisible, message, windowWidth, msgContainerDisplay, msgPreviewDisplay, previewColumns} = this.state;
     // array to hold the first message for each unique message stream
     const msgPreviews = [];
       // unique player ids
@@ -115,9 +160,13 @@ class MessagesPlayers extends React.Component {
     return (
       <div className='my-messages'>
         {messages.length === 0 && <h1>No messages yet. When a coach has messaged you, you will recieve an email from us.</h1>}
+        {!msgPreviewDisplay && <h3 className="msg-backbtn" onClick={this.handleToggleMsgContainers}>Back</h3>}
         {messages.length > 0 && <div>
           <GridList cols={3} cellHeight='auto' padding={5}>
-            <GridTile cols={1}>
+            <GridTile
+              cols={msgContainerDisplay ? 1 : 3}
+              style={{display: msgPreviewDisplay ? 'block' : 'none'}}
+            >
               <div className='msg-previews'>
                 {msgPreviews.map((msg, i) => {
                   return(
@@ -142,7 +191,11 @@ class MessagesPlayers extends React.Component {
                 })}
               </div>
             </GridTile>
-            <GridTile cols={2} className='message-container'>
+            <GridTile
+              cols={msgPreviewDisplay ? 2 : 3}
+              className='message-container'
+              style={{display: msgContainerDisplay ? 'block' : 'none'}}
+            >
               <h2>Coach {coachIds[coachMsgsVisible]}</h2>
               <div className='messages'>
                 <div className="text-input">

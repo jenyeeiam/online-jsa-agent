@@ -203,9 +203,10 @@ body {
       background-color: rgba(255, 183, 197, 0.6) !important;
     }
   }
-  .msg-previews:hover {
+  .msg-previews:hover, .msg-backbtn:hover {
     cursor: pointer;
   }
+
   .message-container {
     padding: 0 15px 15px 15px;
     .messages {
