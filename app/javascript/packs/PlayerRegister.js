@@ -8,6 +8,7 @@ import SelectField from 'material-ui/SelectField';
 import Slider from 'material-ui/Slider';
 import MenuItem from 'material-ui/MenuItem';
 import axios from 'axios';
+import {replace, concat} from 'lodash';
 
 const positions = [
   'LF',
@@ -34,7 +35,7 @@ export default class PlayerRegister extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChangBats = this.handleChangeBats.bind(this);
+    this.handleChangeVideo = this.handleChangeVideo.bind(this);
     this.state = {
       name: '',
       position: [],
@@ -48,12 +49,29 @@ export default class PlayerRegister extends React.Component {
       password: '',
       token: '',
       error: '',
-      success: false
+      success: false,
+      firstVideo: '',
+      secondVideo: '',
+      thirdVideo: ''
     };
   }
 
   componentDidMount() {
     this.setState({token: document.getElementsByTagName("meta")[1].content});
+  }
+
+  handleChangeVideo(video, text) {
+    const newState = {};
+    let link
+    if(/watch/.test(text)) {
+      link = replace(text, 'watch?v=', '');
+      link = replace(link, 'youtube', 'youtu.be');
+      link = replace(link, 'https://www.', 'https://');
+    } else {
+      link = text
+    };
+    newState[video] = link;
+    this.setState(newState);
   }
 
   handleChangeName(name) {
@@ -106,7 +124,10 @@ export default class PlayerRegister extends React.Component {
       accolades,
       battingAvg,
       era,
-      password
+      password,
+      firstVideo,
+      secondVideo,
+      thirdVideo
     } = this.state;
 
     if(!validateEmail(email)) {
@@ -114,6 +135,8 @@ export default class PlayerRegister extends React.Component {
     } else if(!validateParams(name, password)) {
       this.setState({error: 'Fill in all required fields'})
     } else {
+      const videos = [firstVideo, secondVideo, thirdVideo];
+      const videosWithLinks = videos.filter(v => v.length > 0);
       axios({
         method: 'post',
         url: '/players',
@@ -132,7 +155,8 @@ export default class PlayerRegister extends React.Component {
           accolades,
           batting_avg: battingAvg,
           era,
-          password
+          password,
+          videos: videosWithLinks
         }
       }).then((response) => {
         localStorage.setItem('token', response.data.token);
@@ -156,7 +180,10 @@ export default class PlayerRegister extends React.Component {
       era,
       password,
       error,
-      success
+      success,
+      firstVideo,
+      secondVideo,
+      thirdVideo
     } = this.state;
 
     return <div className="player-registration registration-form">
@@ -262,6 +289,34 @@ export default class PlayerRegister extends React.Component {
             multiLine={true}
             fullWidth={true}
             onChange={(e, newVal) => this.handleChangeAccolades(newVal)}
+          />
+        </div>
+      </div>
+      <h1>Videos</h1>
+      <p>{"Video is the best way for Japanese coaches to evaluate a player. In most cases coaches are not aware of who's who in NCAA or NPF softball. Please provide a maxiumum of 3 links to YouTube videos of games or practice in the boxes below. If you don't have videos now don't worry, you can provide links to videos later by editing your profile."}</p>
+      <div className="video-urls">
+        <div className="inline-box-button">
+          <TextField
+            name='1'
+            hintText="e.g. https://youtu.be/X75Roe_davA"
+            value={firstVideo}
+            onChange={(e, newVal) => this.handleChangeVideo('firstVideo', newVal)}
+          />
+        </div>
+        <div className="inline-box-button">
+          <TextField
+            name='2'
+            hintText="e.g. https://youtu.be/X75Roe_davA"
+            value={secondVideo}
+            onChange={(e, newVal) => this.handleChangeVideo('secondVideo', newVal)}
+          />
+        </div>
+        <div className="inline-box-button">
+          <TextField
+            name='3'
+            hintText="e.g. https://youtu.be/X75Roe_davA"
+            value={thirdVideo}
+            onChange={(e, newVal) => this.handleChangeVideo('thirdVideo', newVal)}
           />
         </div>
       </div>

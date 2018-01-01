@@ -12,6 +12,10 @@ class PlayersController < ApplicationController
   def create
     player = Player.new player_params
     if player.save
+      # save the videos
+      if params[:videos].count > 0
+        params[:videos].each{ |vid| Video.create(player_id: Player.last.id, url: vid) }
+      end
       # translate the accolades
       begin
         res = RestClient.post("https://api.microsofttranslator.com/V2/Http.svc/TranslateArray", generate_xml('ja', 'en', params[:accolades]), headers={'Ocp-Apim-Subscription-Key': Rails.application.secrets['jsa_key'], 'Content-Type': 'application/xml'})
