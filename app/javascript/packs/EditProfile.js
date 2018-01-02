@@ -172,8 +172,12 @@ class EditProfile extends React.Component {
     } else if(!!password && password.length < 7) {
       this.setState({error: 'Password must be more than 6 characters'})
     } else {
-      const videos = [video0, video1, video2];
-      const videosWithLinks = videos.filter(v => validateYoutube(v));
+      const videos = [
+        validateYoutube(video0),
+        validateYoutube(video1),
+        validateYoutube(video2)
+      ];
+      const videosWithLinks = videos.filter(v => !!v);
       axios({
         method: 'patch',
         url: `/players/${localStorage.getItem('id')}`,
@@ -250,7 +254,7 @@ class EditProfile extends React.Component {
         <div className="password">
           <TextField
             hintText="Password"
-            errorText={password.length > 5 ? '' : "Must be 6 or more characters"}
+            errorText={"Change password (optional)"}
             type="password"
             onChange={(e, newVal) => this.handleChangePassword(newVal)}
             value={password}
