@@ -156,7 +156,7 @@ class MessagesCoaches extends React.Component {
       <div className='my-messages'>
         {!msgPreviewDisplay && <h3 className="msg-backbtn" onClick={this.handleToggleMsgContainers}>Back</h3>}
         {messages.length === 0 && <div>
-          <h2>No messages yet. Communicate with a player by sending her a message! </h2>
+          <h2>No messages yet. Communicate with a player by sending her a message!</h2>
           <Link to="/players-list">
             <RaisedButton label="Players Page" primary={true}/>
           </Link>
