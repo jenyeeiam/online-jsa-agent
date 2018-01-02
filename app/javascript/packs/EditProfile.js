@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import RaisedButton from "material-ui/RaisedButton";
 import FlatButton from "material-ui/FlatButton";
 import TextField from 'material-ui/TextField';
@@ -8,7 +8,7 @@ import SelectField from 'material-ui/SelectField';
 import Slider from 'material-ui/Slider';
 import MenuItem from 'material-ui/MenuItem';
 import axios from 'axios';
-import {replace} from 'lodash';
+import {replace, keys} from 'lodash';
 
 const positions = [
   'LF',
@@ -24,60 +24,90 @@ const positions = [
 
 function validateEmail(email) {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email.toLowerCase());
+    if(email){
+      return re.test(email.toLowerCase());
+    } else {
+      return null
+    }
 }
 
-function validateParams(name, password) {
-  return name.length > 0 && password.length > 5
+function validateYoutube(url) {
+  let link;
+  let urlError = '';
+  if(/youtube/.test(url) || /youtu.be/.test(url)) {
+    if(/watch/.test(url)) {
+      link = replace(url, 'watch?v=', '');
+      link = replace(link, 'youtube.com/', 'youtube.com/embed/');
+    } else {
+      link = replace(url, 'youtu.be.com/', 'www.youtube.com/embed/');
+    };
+    link += '?rel=0'
+    return link
+  } else {
+    urlError = 'Provide a valid YouTube link'
+    return null
+  }
 }
 
-export default class PlayerRegister extends React.Component {
+class EditProfile extends React.Component {
   constructor(props) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChangeVideo = this.handleChangeVideo.bind(this);
     this.state = {
       name: '',
       position: [],
       bats: '',
       throws: '',
       email: '',
+      password: '',
       almaMater: '',
       accolades: '',
       battingAvg: 0.00,
       era: 0.00,
-      password: '',
       token: '',
       error: '',
       success: false,
-      firstVideo: '',
-      secondVideo: '',
-      thirdVideo: ''
-    };
+      video0: '',
+      video1: '',
+      video2: ''
+    }
   }
 
   componentDidMount() {
     this.setState({token: document.getElementsByTagName("meta")[1].content});
+    axios.get(`/players/${this.props.match.params.player_id}/edit`, {headers: {'token': localStorage.getItem('token')}})
+    .then(response => {
+      if(keys(response.data)[0] === 'error') {
+        this.setState({error: response.data.error})
+      } else {
+        const player = response.data.player;
+        const videos = response.data.videos;
+        this.setState({
+          name: player.name,
+          position: player.position.split(', '),
+          bats: player.bats,
+          throws: player.throws,
+          email: player.email,
+          almaMater: player.alma_mater,
+          accolades: player.accolades,
+          battingAvg: player.batting_avg,
+          era: player.era
+        });
+        const videoState = {}
+        videos.forEach((vid, i) => {
+          videoState[`video${i}`] = vid.url
+        });
+        this.setState(videoState);
+      }
+    }).catch(error => {
+      this.setState({error: "Couldn't retreive player"})
+    })
   }
 
   handleChangeVideo(video, text) {
     const newState = {};
-    let link;
-    let urlError = '';
-    if(/youtube/.test(text) || /youtu.be/.test(text)) {
-      if(/watch/.test(text)) {
-        link = replace(text, 'watch?v=', '');
-        link = replace(link, 'youtube.com/', 'youtube.com/embed/');
-      } else {
-        link = replace(text, 'youtu.be.com/', 'www.youtube.com/embed/');
-      };
-      link += '?rel=0'
-    } else {
-      link = ''
-      urlError = 'Provide a valid YouTube link'
-    }
-    newState[video] = link;
-    newState[`${video}Error`] = urlError;
+    const urlError = validateYoutube(text);
+    newState[video] = text;
+    newState[`${video}Error`] = urlError ? '' : 'Provide a valid YouTube link'
     this.setState(newState);
   }
 
@@ -132,21 +162,21 @@ export default class PlayerRegister extends React.Component {
       battingAvg,
       era,
       password,
-      firstVideo,
-      secondVideo,
-      thirdVideo
+      video0,
+      video1,
+      video2
     } = this.state;
 
-    if(!validateEmail(email)) {
+    if(!!email && !validateEmail(email)) {
       this.setState({error: 'Provide a valid email'})
-    } else if(!validateParams(name, password)) {
-      this.setState({error: 'Fill in all required fields'})
+    } else if(!!password && password.length < 7) {
+      this.setState({error: 'Password must be more than 6 characters'})
     } else {
-      const videos = [firstVideo, secondVideo, thirdVideo];
-      const videosWithLinks = videos.filter(v => v.length > 0);
+      const videos = [video0, video1, video2];
+      const videosWithLinks = videos.filter(v => validateYoutube(v));
       axios({
-        method: 'post',
-        url: '/players',
+        method: 'patch',
+        url: `/players/${localStorage.getItem('id')}`,
         headers: {
           "Content-Type": "application/json",
           'X-Requested-With': 'XMLHttpRequest',
@@ -168,15 +198,14 @@ export default class PlayerRegister extends React.Component {
       }).then((response) => {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', 'player');
-        localStorage.setItem('id', response.data.id);
-        this.setState({success: true});
+        this.setState({success: true})
       }).catch((error) => {
         this.setState({error: 'Profile unable to be saved 😢'})
       });
     }
   }
 
-  render() {
+  render () {
     const {name,
       position,
       bats,
@@ -189,24 +218,23 @@ export default class PlayerRegister extends React.Component {
       password,
       error,
       success,
-      firstVideo,
-      secondVideo,
-      thirdVideo,
-      firstVideoError,
-      secondVideoError,
-      thirdVideoError
+      video0,
+      video1,
+      video2,
+      video0Error,
+      video1Error,
+      video2Error
     } = this.state;
 
     return <div className="player-registration registration-form">
-      {error.length > 0 && <h3>{error}</h3>}
+      {error && <h3>{error}</h3>}
       {success && <Redirect to="/my-messages/player"/>}
-      <h1>Create an Account</h1>
+      <h1>Account Information</h1>
       <div className="player-info">
         <div className="name">
           <TextField
             autoFocus={true}
             hintText="Name"
-            errorText={name.length > 0 ? '' : "This field is required"}
             onChange={(e, newVal) => this.handleChangeName(newVal)}
             value={name}
           />
@@ -230,7 +258,6 @@ export default class PlayerRegister extends React.Component {
         </div>
       </div>
       <h1>Player Information</h1>
-      <p>{"These fields are not required, but it is encouraged to be as detailed as possible. Japanese coaches are not aware of players' names and will contact you based on the merit you outline here. If a coach is interested in you they will send you a message"}</p>
       <div className='player-merits'>
         <div className='bats'>
           <SelectField
@@ -266,7 +293,7 @@ export default class PlayerRegister extends React.Component {
           </SelectField>
         </div>
         <div className="avg">
-          <span className='span-labels'>Batting Average last season {battingAvg.toFixed(3)}</span>
+          <span className='span-labels'>Batting Average last season {battingAvg}</span>
           <Slider
             defaultValue={battingAvg}
             value={battingAvg}
@@ -304,39 +331,41 @@ export default class PlayerRegister extends React.Component {
         </div>
       </div>
       <h1>Videos</h1>
-      <p>{"Video is the best way for Japanese coaches to evaluate a player. In most cases coaches are not aware of who's who in NCAA or NPF softball. Please provide a maxiumum of 3 links to YouTube videos of games or practice in the boxes below. If you don't have videos now don't worry, you can provide links to videos later by editing your profile."}</p>
       <div className="video-urls">
         <div className="inline-box-button">
           <TextField
             name='1'
             style={{width: '45%'}}
+            value={video0}
             hintText="e.g. https://www.youtube.com/watch..."
-            onChange={(e, newVal) => this.handleChangeVideo('firstVideo', newVal)}
-            errorText={firstVideoError}
+            onChange={(e, newVal) => this.handleChangeVideo('video0', newVal)}
+            errorText={video0Error}
           />
         </div>
         <div className="inline-box-button">
           <TextField
             name='2'
+            value={video1}
             style={{width: '45%'}}
             hintText="e.g. https://www.youtube.com/watch..."
-            onChange={(e, newVal) => this.handleChangeVideo('secondVideo', newVal)}
-            errorText={secondVideoError}
+            onChange={(e, newVal) => this.handleChangeVideo('video1', newVal)}
+            errorText={video1Error}
           />
         </div>
         <div className="inline-box-button">
           <TextField
             name='3'
+            value={video2}
             style={{width: '45%'}}
             hintText="e.g. https://www.youtube.com/watch..."
-            onChange={(e, newVal) => this.handleChangeVideo('thirdVideo', newVal)}
-            errorText={thirdVideoError}
+            onChange={(e, newVal) => this.handleChangeVideo('video2', newVal)}
+            errorText={video2Error}
           />
         </div>
       </div>
       <div className='signup-btns'>
         <RaisedButton
-          label="Sign Up"
+          label="Edit Profile"
           primary={true}
           onClick={() => this.handleSubmit()}
         />
@@ -350,3 +379,5 @@ export default class PlayerRegister extends React.Component {
     </div>
   }
 }
+
+export default EditProfile;

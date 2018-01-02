@@ -8,6 +8,7 @@ import Welcome from "./Welcome";
 import CoachRegister from "./CoachRegister";
 import Login from "./Login";
 import PlayerRegister from "./PlayerRegister";
+import EditProfile from "./EditProfile";
 import PlayerList from "./PlayerList";
 import NewMessage from "./NewMessage";
 import MessagesCoaches from "./MessagesCoaches";
@@ -35,6 +36,7 @@ const App = () => (
         <Route exact path="/register/coaches" component={CoachRegister}/>
         <Route exact path="/login" component={Login}/>
         <Route exact path="/register/players" component={PlayerRegister}/>
+        <Route exact path="/player/:player_id/edit" component={EditProfile} />
         <Route exact path="/players-list" component={PlayerList}/>
         <Route exact path="/message/:player_id" component={NewMessage} />
         <Route exact path="/my-messages/coach" component={MessagesCoaches} />

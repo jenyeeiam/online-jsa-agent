@@ -8,10 +8,14 @@ class SessionsController < ApplicationController
     token = JWT.encode payload, nil, 'none'
     if Player.find_by(email: params[:email]).try(:authenticate, params[:password])
       puts 'player login'
-      render json: {token: token, user: 'player'}
+      render json: {
+        token: token,
+        user: 'player',
+        id: Player.find_by(email: params[:email]).id
+      }
     elsif Coach.find_by(email: params[:email]).try(:authenticate, params[:password])
       puts 'coach login'
-      render json: {token: token, user: 'coach'}
+      render json: {token: token, user: 'coach', id: Coach.find_by(email: params[:email]).id}
     else
       render json: {error: 'Incorrect email or password'}
     end

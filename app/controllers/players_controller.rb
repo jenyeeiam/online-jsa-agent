@@ -9,47 +9,57 @@ class PlayersController < ApplicationController
     end
   end
 
+  def edit
+    player = Player.find(params[:id])
+    if player
+      render json: {player: player, videos: player.videos}
+    else
+      render json: {error: "No player found"}
+    end
+  end
+
+  def update
+    @player = Player.find(params[:id])
+    if @player.update_attributes(update_player_params)
+      @player.update_attributes({password: params[:password]}) unless params[:password].length == 0
+      @player.translate_accolades(params[:accolades])
+      params[:videos].each do |vid|
+        unless Video.find_by(url: vid)
+          @player.videos.create(url: vid)
+        end
+      end
+    else
+      render json: {error: 'Unable to update player'}
+    end
+    payload = {data: @player.email}
+    token = JWT.encode payload, nil, 'none'
+    render json: {token: token, id: @player.id}
+  end
+
   def create
-    player = Player.new player_params
-    if player.save
+    @player = Player.new player_params
+    if @player.save
       # save the videos
       if params[:videos].count > 0
-        params[:videos].each{ |vid| Video.create(player_id: Player.last.id, url: vid) }
+        params[:videos].each{ |vid| @player.videos.create(url: vid) }
       end
       # translate the accolades
-      begin
-        res = RestClient.post("https://api.microsofttranslator.com/V2/Http.svc/TranslateArray", generate_xml('ja', 'en', params[:accolades]), headers={'Ocp-Apim-Subscription-Key': Rails.application.secrets['jsa_key'], 'Content-Type': 'application/xml'})
-        if res.code == 200
-          parsed_response = Nokogiri::HTML(res.body)
-          translation = parsed_response.children[1].children.first.children.first.children.first.children[2].children.text
-        else
-          translation = 'Failed Translation'
-        end
-        Player.last.update_attributes({japanese_accolades: translation})
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.response
-      end
-      payload = {data: player.email}
+      @player.translate_accolades(params[:accolades])
+      payload = {data: @player.email}
       token = JWT.encode payload, nil, 'none'
-      render json: {token: token}
+      render json: {token: token, id: @player.id}
     else
       render json: {error: 'couldnt save'}
     end
   end
 
-  def login
-    if Player.find_by(email: params[:email]).try(:authenticate, params[:password])
-      payload = {data: params[:email]}
-      token = JWT.encode payload, nil, 'none'
-      render json: {token: token}
-    else
-      render json: {error: 'Incorrect email or password'}
-    end
-  end
-
   private
   def player_params
-    params.permit(:name, :position, :bats, :throws, :email, :alma_mater, :accolades, :batting_avg, :era, :password)
+    params.permit(:name, :position, :bats, :throws, :email, :alma_mater, :accolades, :batting_avg, :era, :password, :videos)
+  end
+
+  def update_player_params
+    params.permit(:name, :position, :bats, :throws, :email, :alma_mater, :accolades, :batting_avg, :era, :videos)
   end
 
 end

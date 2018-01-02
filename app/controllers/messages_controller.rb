@@ -8,10 +8,8 @@ class MessagesController < ApplicationController
 
   def index
     user = check_user_type params[:auth_token]
-    puts user
-    if user.is_a? Coach
-      render json: user.messages.order(id: :desc)
-    else
+    puts user.inspect
+    if user
       render json: user.messages.order(id: :desc)
     end
   end

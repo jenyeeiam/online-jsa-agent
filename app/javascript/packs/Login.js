@@ -46,6 +46,7 @@ class Login extends React.Component {
         } else {
           localStorage.setItem('token', response.data.token);
           localStorage.setItem('user', response.data.user);
+          localStorage.setItem('id', response.data.id);
           this.setState({signedIn: true})
         }
       })
