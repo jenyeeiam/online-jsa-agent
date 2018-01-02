@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { Link, Redirect } from "react-router-dom";
 import {Card, CardActions, CardHeader, CardTitle, CardText} from 'material-ui/Card';
+import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import Avatar from 'material-ui/Avatar';
 
@@ -10,10 +11,34 @@ import {keys} from 'lodash';
 export default class PlayerList extends React.Component {
   constructor(props) {
     super(props);
+    this.handleClose = this.handleClose.bind(this);
     this.state = {
       players: [],
-      error: ''
+      error: '',
+      videosOpen: false,
+      videos: []
     };
+  }
+
+  handleOpen() {
+    this.setState({videosOpen: true});
+  };
+
+  handleClose() {
+    this.setState({videosOpen: false});
+  };
+
+  handleFetchVideos(playerId) {
+    axios.get(`/videos?player_id=${playerId}`, {headers: {'token': localStorage.getItem('token')}})
+    .then(response => {
+      if(keys(response.data)[0] === 'error') {
+        this.setState({error: response.data.error})
+      } else {
+        this.setState({videos: response.data})
+      }
+    }).catch(error => {
+      this.setState({error: "Couldn't retreive videos"})
+    })
   }
 
   componentDidMount() {
@@ -25,14 +50,42 @@ export default class PlayerList extends React.Component {
         this.setState({players: response.data})
       }
     }).catch(error => {
-      this.setState({error: "Couldn't retreive data"})
+      this.setState({error: "Couldn't retreive players"})
     })
   }
 
   render() {
-    const {players, error} = this.state;
+    const {players, error, videosOpen, videos} = this.state;
+    const actions = [
+      <FlatButton
+        label="Close"
+        primary={true}
+        onClick={this.handleClose}
+      />
+    ];
     return <div className="players-list">
       {error && <p>{error}</p>}
+      <Dialog
+          title="Videos"
+          actions={actions}
+          modal={false}
+          open={videosOpen}
+          onRequestClose={this.handleClose}
+          autoScrollBodyContent={true}
+        >
+          {videos.length > 0 && videos.map((video, i) => {
+            return <iframe
+              key={i}
+              className="embedded-video"
+              src={video.url}
+              frameBorder="0"
+              gesture="media"
+              allow="encrypted-media"
+              allowFullScreen
+            ></iframe>
+          })}
+          {videos.length === 0 && <h3>No Videos</h3>}
+      </Dialog>
       {players.map((player, index) => {
         let subtitle = `Bats/Throws: ${player.bats}/${player.throws} | `;
         subtitle += `AVG: ${player.batting_avg}`
@@ -68,6 +121,10 @@ export default class PlayerList extends React.Component {
               <Link to={`/message/${player.id}`}>
                 <FlatButton label={`Message Player ${player.id}`} secondary={true}/>
               </Link>
+              <FlatButton label='Videos' secondary={true} onClick={() => {
+                this.handleFetchVideos(player.id);
+                this.handleOpen();
+              }}/>
             </CardActions>
           </Card>)
       })}

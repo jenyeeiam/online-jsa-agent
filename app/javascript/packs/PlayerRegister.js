@@ -8,7 +8,7 @@ import SelectField from 'material-ui/SelectField';
 import Slider from 'material-ui/Slider';
 import MenuItem from 'material-ui/MenuItem';
 import axios from 'axios';
-import {replace, concat} from 'lodash';
+import {replace} from 'lodash';
 
 const positions = [
   'LF',
@@ -62,15 +62,22 @@ export default class PlayerRegister extends React.Component {
 
   handleChangeVideo(video, text) {
     const newState = {};
-    let link
-    if(/watch/.test(text)) {
-      link = replace(text, 'watch?v=', '');
-      link = replace(link, 'youtube', 'youtu.be');
-      link = replace(link, 'https://www.', 'https://');
+    let link;
+    let urlError = '';
+    if(/youtube/.test(text) || /youtu.be/.test(text)) {
+      if(/watch/.test(text)) {
+        link = replace(text, 'watch?v=', '');
+        link = replace(link, 'youtube.com/', 'youtube.com/embed/');
+      } else {
+        link = replace(text, 'youtu.be.com/', 'www.youtube.com/embed/');
+      };
+      link += '?rel=0'
     } else {
-      link = text
-    };
+      link = ''
+      urlError = 'Provide a valid YouTube link'
+    }
     newState[video] = link;
+    newState[`${video}Error`] = urlError;
     this.setState(newState);
   }
 
@@ -183,7 +190,10 @@ export default class PlayerRegister extends React.Component {
       success,
       firstVideo,
       secondVideo,
-      thirdVideo
+      thirdVideo,
+      firstVideoError,
+      secondVideoError,
+      thirdVideoError
     } = this.state;
 
     return <div className="player-registration registration-form">
@@ -298,25 +308,28 @@ export default class PlayerRegister extends React.Component {
         <div className="inline-box-button">
           <TextField
             name='1'
-            hintText="e.g. https://youtu.be/X75Roe_davA"
-            value={firstVideo}
+            style={{width: '45%'}}
+            hintText="e.g. https://www.youtube.com/watch..."
             onChange={(e, newVal) => this.handleChangeVideo('firstVideo', newVal)}
+            errorText={firstVideoError}
           />
         </div>
         <div className="inline-box-button">
           <TextField
             name='2'
-            hintText="e.g. https://youtu.be/X75Roe_davA"
-            value={secondVideo}
+            style={{width: '45%'}}
+            hintText="e.g. https://www.youtube.com/watch..."
             onChange={(e, newVal) => this.handleChangeVideo('secondVideo', newVal)}
+            errorText={secondVideoError}
           />
         </div>
         <div className="inline-box-button">
           <TextField
             name='3'
-            hintText="e.g. https://youtu.be/X75Roe_davA"
-            value={thirdVideo}
+            style={{width: '45%'}}
+            hintText="e.g. https://www.youtube.com/watch..."
             onChange={(e, newVal) => this.handleChangeVideo('thirdVideo', newVal)}
+            errorText={thirdVideoError}
           />
         </div>
       </div>
