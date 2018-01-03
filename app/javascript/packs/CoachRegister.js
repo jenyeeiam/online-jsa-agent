@@ -83,7 +83,7 @@ export default class CoachRegister extends React.Component {
       <div className="text-fields">
         <TextField
           autoFocus={true}
-          hintText="チーム"
+          hintText="チーム名"
           errorText={team.length > 0 ? '' : "これは必須です"}
           onChange={(e, newVal) => this.handleChangeTeam(newVal)}
           value={team}
@@ -105,7 +105,7 @@ export default class CoachRegister extends React.Component {
       <div className="btns">
         <RaisedButton
           className="signup-btn"
-          label="提出する"
+          label="登録する"
           primary={true}
           onClick={() => this.handleSubmit()}
         />
