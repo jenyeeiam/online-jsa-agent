@@ -46,7 +46,7 @@ export default class Welcome extends React.Component {
           <p className="fake-button"><span onClick={this.handleClick}>Hide</span></p>
         </div>)}
         <div className="welcome-buttons">
-          <h3>Register Now</h3>
+          <h3>Register 登録</h3>
           <div className="login-btn">
             <Link to="/register/players">
               <RaisedButton
@@ -60,7 +60,7 @@ export default class Welcome extends React.Component {
           <div className="login-btn">
             <Link to="/register/coaches">
               <RaisedButton
-                label="Coaches"
+                label="コーチ"
                 secondary={true}
                 labelStyle={labelStyle}
                 style={buttonStyle}

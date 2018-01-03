@@ -79,24 +79,24 @@ export default class CoachRegister extends React.Component {
     return <div className="coach-registration registration-form">
       {signedIn && <Redirect to="/players-list"/>}
       {error.length > 0 && <h3>{error}</h3>}
-      <h1>Create an Account</h1>
+      <h1>アカウントを作成する</h1>
       <div className="text-fields">
         <TextField
           autoFocus={true}
-          hintText="Team"
-          errorText={team.length > 0 ? '' : "This field is required"}
+          hintText="チーム"
+          errorText={team.length > 0 ? '' : "これは必須です"}
           onChange={(e, newVal) => this.handleChangeTeam(newVal)}
           value={team}
         />
         <TextField
-          hintText="Email"
-          errorText={validateEmail(email) ? '' : "Provide a valid email"}
+          hintText="Eメール"
+          errorText={validateEmail(email) ? '' : "無効なメール"}
           onChange={(e, newVal) => this.handleChangeEmail(newVal)}
           value={email}
         />
         <TextField
-          hintText="Password"
-          errorText={password.length > 5 ? '' : "Must be 6 or more characters"}
+          hintText="パスワード"
+          errorText={password.length > 5 ? '' : "6文字以上でなければなりません"}
           type="password"
           onChange={(e, newVal) => this.handleChangePassword(newVal)}
           value={password}
@@ -105,13 +105,13 @@ export default class CoachRegister extends React.Component {
       <div className="btns">
         <RaisedButton
           className="signup-btn"
-          label="Sign Up"
+          label="提出する"
           primary={true}
           onClick={() => this.handleSubmit()}
         />
         <Link to="/" className="back-btn">
           <FlatButton
-            label="Back Home"
+            label="自宅"
             primary={true}
           />
         </Link>

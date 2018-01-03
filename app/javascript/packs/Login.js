@@ -66,15 +66,16 @@ class Login extends React.Component {
         {error.length > 0 && <h3>{error}</h3>}
         {signedIn && <Redirect to={localStorage.getItem('user') === 'player' ? '/my-messages/player' : '/players-list'} />}
         <h1>Welcome Back</h1>
+        <h1>ようこそ</h1>
         <div className="text-fields">
           <TextField
             autoFocus={true}
-            hintText="Email"
+            hintText="Email Eメール"
             onChange={(e, newVal) => this.handleChangeEmail(newVal)}
             value={email}
           />
           <TextField
-            hintText="Password"
+            hintText="Password パスワード"
             onChange={(e, newVal) => this.handleChangePassword(newVal)}
             value={password}
             type="password"
@@ -84,13 +85,13 @@ class Login extends React.Component {
         <div className="btns">
           <RaisedButton
             className="signup-btn"
-            label="Login"
+            label="Login ログイン"
             primary={true}
             onClick={() => this.handleSubmit()}
           />
           <Link to="/" className="back-btn">
             <FlatButton
-              label="Back Home"
+              label="Home 自宅"
               primary={true}
             />
           </Link>

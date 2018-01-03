@@ -36,7 +36,7 @@ export default class NavBar extends React.Component {
           <img src={logo} alt="logo" />
         </Link>
       </div>
-        {!signedIn && <Link to="/login"><span className='logout-btn'>Login</span></Link>}
+        {!signedIn && <Link to="/login"><span className='logout-btn'>Login ログイン</span></Link>}
         {signedIn && <div>
           <Link to='/' onClick={this.handleSignOut}><span className='logout-btn'>Logout</span></Link>
           <Link to={`/my-messages/${localStorage.getItem('user')}`}><span className='logout-btn'>My Messages</span></Link>
