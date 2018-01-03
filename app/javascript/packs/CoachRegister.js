@@ -111,7 +111,7 @@ export default class CoachRegister extends React.Component {
         />
         <Link to="/" className="back-btn">
           <FlatButton
-            label="自宅"
+            label="ホーム"
             primary={true}
           />
         </Link>

@@ -91,7 +91,7 @@ class Login extends React.Component {
           />
           <Link to="/" className="back-btn">
             <FlatButton
-              label="Home 自宅"
+              label="Home ホーム"
               primary={true}
             />
           </Link>
