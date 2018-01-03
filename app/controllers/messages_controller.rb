@@ -10,7 +10,13 @@ class MessagesController < ApplicationController
     user = check_user_type params[:auth_token]
     puts user.inspect
     if user
-      render json: user.messages.order(id: :desc)
+      # render json: user.messages.order(id: :desc)
+      if user.class.to_s == 'Player'
+        render json: user.messages.order(id: :desc)
+      else
+        coach = Coach.includes(:messages, :players).where(id: user.id)
+        render json: {messages: coach.first.messages.order(id: :desc), players: coach.first.players.distinct(:id)}
+      end
     end
   end
 

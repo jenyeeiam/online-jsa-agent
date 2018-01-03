@@ -49,7 +49,7 @@ class MessagesCoaches extends React.Component {
       if(response.data.error) {
         this.setState({error: respose.data.error})
       } else {
-        this.setState({messages: response.data})
+        this.setState({messages: response.data.messages, players: response.data.players})
       }
     })
     .catch(error => {
@@ -140,7 +140,15 @@ class MessagesCoaches extends React.Component {
   }
 
   render () {
-    const {messages, playerMsgsVisible, message, windowWidth, msgContainerDisplay, msgPreviewDisplay} = this.state;
+    const {
+      messages,
+      players,
+      playerMsgsVisible,
+      message,
+      windowWidth,
+      msgContainerDisplay,
+      msgPreviewDisplay
+    } = this.state;
     // array to hold the first message for each unique message stream
     const msgPreviews = [];
       // unique player ids
@@ -168,6 +176,7 @@ class MessagesCoaches extends React.Component {
           >
             <div className='msg-previews'>
               {msgPreviews.map((msg, i) => {
+                let playerIndex = findIndex(players, (o) => o.id === msg.player_id)
                 return(
                   <Card
                     key={msg.id}
@@ -175,7 +184,7 @@ class MessagesCoaches extends React.Component {
                     className={i === playerMsgsVisible ? 'active' : ''}
                   >
                     <CardHeader
-                      title={`Player ${msg.player_id}`}
+                      title={`Player ${players[playerIndex].name}`}
                       subtitle={truncate(msg.japanese_text, {length: 50})}
                       avatar={<Avatar
                         color={'#ffbc49'}

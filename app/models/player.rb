@@ -2,6 +2,7 @@ class Player < ApplicationRecord
   include GenerateXml
   has_many :messages
   has_many :videos
+  has_many :coaches, through: :messages
   validates :email, uniqueness: true
   has_secure_password
 
