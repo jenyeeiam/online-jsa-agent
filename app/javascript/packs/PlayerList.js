@@ -8,6 +8,16 @@ import Avatar from 'material-ui/Avatar';
 
 import {keys} from 'lodash';
 
+const positionsLookup = {
+  P: '投手',
+  C: 'キャッチャー',
+  '1B': '一塁',
+  '2B': '二塁',
+  '3B': '三塁',
+  'SS': 'ショート',
+
+};
+
 export default class PlayerList extends React.Component {
   constructor(props) {
     super(props);
@@ -66,7 +76,7 @@ export default class PlayerList extends React.Component {
     return <div className="players-list">
       {error && <p>{error}</p>}
       <Dialog
-          title="Videos"
+          title="ビデオ"
           actions={actions}
           modal={false}
           open={videosOpen}
@@ -84,13 +94,13 @@ export default class PlayerList extends React.Component {
               allowFullScreen
             ></iframe>
           })}
-          {videos.length === 0 && <h3>No Videos</h3>}
+          {videos.length === 0 && <h3>ビデオはありません</h3>}
       </Dialog>
       {players.map((player, index) => {
-        let subtitle = `Bats/Throws: ${player.bats}/${player.throws} | `;
-        subtitle += `AVG: ${player.batting_avg}`
+        let subtitle = `スタイル:     ${player.bats} ${'\u00B7'} ${player.throws} | `;
+        subtitle += `打率: ${player.batting_avg}`
         if(/P/.test(player.position)) {
-          subtitle += ` | ERA: ${player.era}`
+          subtitle += ` | 防御率: ${player.era}`
         }
         //if player has more than one position
         let position = player.position;
@@ -102,7 +112,7 @@ export default class PlayerList extends React.Component {
         return (
           <Card key={player.id}>
             <CardHeader
-              title={`Position: ${player.position}`}
+              title={`ポジション: ${player.position}`}
               subtitle={subtitle}
               avatar={<Avatar
                 color={'#ffbc49'}
@@ -112,16 +122,16 @@ export default class PlayerList extends React.Component {
                 {position || 'N/A'}
               </Avatar>}
             />
-          <CardTitle title={player.name} subtitle={`College: ${player.alma_mater}`} />
+          <CardTitle title={player.name} subtitle={`出身校: ${player.alma_mater}`} />
             <CardText>
               <p>{player.accolades}</p>
               <p>{player.japanese_accolades}</p>
             </CardText>
             <CardActions>
               <Link to={`/message/${player.id}`}>
-                <FlatButton label={`Message Player ${player.id}`} secondary={true}/>
+                <FlatButton label={`${player.name}にメッセージを送る`} secondary={true}/>
               </Link>
-              <FlatButton label='Videos' secondary={true} onClick={() => {
+              <FlatButton label='ビデオ' secondary={true} onClick={() => {
                 this.handleFetchVideos(player.id);
                 this.handleOpen();
               }}/>
