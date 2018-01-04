@@ -29,6 +29,8 @@ export default class NavBar extends React.Component {
 
   render() {
     const {signedIn} = this.state;
+    const user = localStorage.getItem('user');
+    const userId = localStorage.getItem('id');
 
     return <div className="nav-bar">
       <div className="logo">
@@ -38,10 +40,10 @@ export default class NavBar extends React.Component {
       </div>
         {!signedIn && <Link to="/login"><span className='logout-btn'>Login ログイン</span></Link>}
         {signedIn && <div>
-          <Link to='/' onClick={this.handleSignOut}><span className='logout-btn'>Logout</span></Link>
-          <Link to={`/my-messages/${localStorage.getItem('user')}`}><span className='logout-btn'>My Messages</span></Link>
-          {localStorage.getItem('user') === 'coach' && <Link to='/players-list'><span className='logout-btn'>Players</span></Link>}
-          {localStorage.getItem('user') === 'player' && <Link to={`/player/${localStorage.getItem('id')}/edit`}><span className='logout-btn'>Edit Profile</span></Link>}
+          <Link to='/' onClick={this.handleSignOut}><span className='logout-btn'>{user === 'coach' ? 'ログアウト' : 'Logout'}</span></Link>
+          <Link to={`/my-messages/${user}`}><span className='logout-btn'>{user === 'coach' ? 'メッセージ' : 'My Messages'}</span></Link>
+          {user === 'coach' && <Link to='/players-list'><span className='logout-btn'>{user === 'coach' ? '選手として' : 'Players'}</span></Link>}
+          {user === 'player' && <Link to={`/player/${userId}/edit`}><span className='logout-btn'>Edit Profile</span></Link>}
         </div>}
     </div>
   }
