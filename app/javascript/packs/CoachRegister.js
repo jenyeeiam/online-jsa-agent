@@ -84,13 +84,13 @@ export default class CoachRegister extends React.Component {
         <TextField
           autoFocus={true}
           hintText="チーム名"
-          errorText={team.length > 0 ? '' : "これは必須です"}
+          errorText={team.length > 0 ? '' : "必須です"}
           onChange={(e, newVal) => this.handleChangeTeam(newVal)}
           value={team}
         />
         <TextField
           hintText="Eメール"
-          errorText={validateEmail(email) ? '' : "無効なメール"}
+          errorText={validateEmail(email) ? '' : "有効なEメールアドレスを入力して下さい"}
           onChange={(e, newVal) => this.handleChangeEmail(newVal)}
           value={email}
         />
@@ -111,7 +111,7 @@ export default class CoachRegister extends React.Component {
         />
         <Link to="/" className="back-btn">
           <FlatButton
-            label="ホーム"
+            label="ホームへ戻る"
             primary={true}
           />
         </Link>
