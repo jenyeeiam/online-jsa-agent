@@ -9,13 +9,20 @@ import Avatar from 'material-ui/Avatar';
 import {keys} from 'lodash';
 
 const positionsLookup = {
-  P: '投手',
-  C: 'キャッチャー',
+  'P': '投手',
+  'C': 'キャッチャー',
   '1B': '一塁',
   '2B': '二塁',
   '3B': '三塁',
   'SS': 'ショート',
+  'LF': 'レフト',
+  'RF': '',
+  'CF': 'センター'
+};
 
+const rightLeft = {
+  'L': '左',
+  'R': '右'
 };
 
 export default class PlayerList extends React.Component {
@@ -97,30 +104,25 @@ export default class PlayerList extends React.Component {
           {videos.length === 0 && <h3>ビデオはありません</h3>}
       </Dialog>
       {players.map((player, index) => {
-        let subtitle = `スタイル:     ${player.bats} ${'\u00B7'} ${player.throws} | `;
+        let subtitle = `スタイル: ${player.bats} ${'\u00B7'} ${player.throws} ${'\u00A0'}|${'\u00A0'} `;
         subtitle += `打率: ${player.batting_avg}`
         if(/P/.test(player.position)) {
           subtitle += ` | 防御率: ${player.era}`
         }
         //if player has more than one position
         let position = player.position;
+        let japanesePositions;
         if(/,/.test(position)) {
-          let positionArray = position.split(',');
-          position = positionArray[0]
+          let positionArray = position.split(', ');
+          japanesePositions = positionArray.map(p => positionsLookup[p]);
+          // position = japanesePositions[0]
         }
 
         return (
           <Card key={player.id}>
             <CardHeader
-              title={`ポジション: ${player.position}`}
+              title={`ポジション: ${japanesePositions}`}
               subtitle={subtitle}
-              avatar={<Avatar
-                color={'#ffbc49'}
-                backgroundColor={'#542e68'}
-                size={50}
-            >
-                {position || 'N/A'}
-              </Avatar>}
             />
           <CardTitle title={player.name} subtitle={`出身校: ${player.alma_mater}`} />
             <CardText>
