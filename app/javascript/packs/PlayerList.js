@@ -111,17 +111,15 @@ export default class PlayerList extends React.Component {
         }
         //if player has more than one position
         let position = player.position;
-        let japanesePositions;
         if(/,/.test(position)) {
           let positionArray = position.split(', ');
-          japanesePositions = positionArray.map(p => positionsLookup[p]);
-          // position = japanesePositions[0]
+          position = positionArray.map(p => positionsLookup[p]);
         }
 
         return (
           <Card key={player.id}>
             <CardHeader
-              title={`ポジション: ${japanesePositions}`}
+              title={`ポジション: ${position}`}
               subtitle={subtitle}
             />
           <CardTitle title={player.name} subtitle={`出身校: ${player.alma_mater}`} />
