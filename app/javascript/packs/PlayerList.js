@@ -122,7 +122,7 @@ export default class PlayerList extends React.Component {
         return (
           <Card key={player.id}>
             <CardHeader
-              title={`ポジション: ${translatedPosition || 'no position'}`}
+              title={`ポジション: ${translatedPosition || ''}`}
               subtitle={subtitle}
             />
           <CardTitle title={player.name} subtitle={`出身校: ${player.alma_mater}`} />

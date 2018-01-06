@@ -184,7 +184,7 @@ class MessagesCoaches extends React.Component {
                     className={i === playerMsgsVisible ? 'active' : ''}
                   >
                     <CardHeader
-                      title={`${players[playerIndex].name || 'No Name'}`}
+                      title={`${players[playerIndex].name || '選手'}`}
                       subtitle={truncate(msg.japanese_text, {length: 50})}
                       avatar={<Avatar
                         className='avatar'
@@ -202,7 +202,7 @@ class MessagesCoaches extends React.Component {
             className='message-container'
             style={{display: msgContainerDisplay ? 'block' : 'none'}}
           >
-            <h2>選手とし {playerName}</h2>
+            <h2>{playerName} 選手</h2>
             <div className='messages'>
               <div className="text-input">
                 <TextField
