@@ -115,12 +115,13 @@ export default class PlayerList extends React.Component {
         if(/,/.test(position)) {
           let positionArray = position.split(', ');
           translatedPosition = positionArray.map(p => positionsLookup[p]).join(', ');
+          console.log(translatedPosition)
         }
 
         return (
           <Card key={player.id}>
             <CardHeader
-              title={`ポジション: ${translatedPosition}`}
+              title={`ポジション: ${translatedPosition || 'no position'}`}
               subtitle={subtitle}
             />
           <CardTitle title={player.name} subtitle={`出身校: ${player.alma_mater}`} />
