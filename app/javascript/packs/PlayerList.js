@@ -115,7 +115,8 @@ export default class PlayerList extends React.Component {
         if(/,/.test(position)) {
           let positionArray = position.split(', ');
           translatedPosition = positionArray.map(p => positionsLookup[p]).join(', ');
-          console.log(translatedPosition)
+        } else {
+          translatedPosition = positionsLookup[position]
         }
 
         return (
