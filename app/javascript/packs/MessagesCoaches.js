@@ -60,8 +60,8 @@ class MessagesCoaches extends React.Component {
   componentDidMount() {
     this.handleFetchMessages();
     // window.addEventListener('resize', this.handleResize);
-    this.setState({windowWidth: window.innerWidth});
-    if(window.innerWidth < 700) {
+    this.setState({windowWidth: screen.width});
+    if(screen.width < 700) {
       this.setState({msgContainerDisplay: false});
       this.setState({msgPreviewDisplay: true});
     } else {
@@ -71,7 +71,7 @@ class MessagesCoaches extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize);
+    // window.removeEventListener('resize', this.handleResize);
   }
 
   handleToggleMsgContainers() {
