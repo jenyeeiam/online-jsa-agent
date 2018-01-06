@@ -59,7 +59,7 @@ class MessagesCoaches extends React.Component {
 
   componentDidMount() {
     this.handleFetchMessages();
-    window.addEventListener('resize', this.handleResize);
+    // window.addEventListener('resize', this.handleResize);
     this.setState({windowWidth: window.innerWidth});
     if(window.innerWidth < 700) {
       this.setState({msgContainerDisplay: false});
@@ -208,7 +208,7 @@ class MessagesCoaches extends React.Component {
                 <TextField
                   value={message}
                   autoFocus={true}
-                  hintText="Type a message..."
+                  hintText="メッセージを入力..."
                   multiLine={true}
                   fullWidth={true}
                   onKeyPress={(ev) => {if(ev.key === 'Enter') {this.handleSubmit()}}}
