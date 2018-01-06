@@ -208,6 +208,10 @@ body {
     .active {
       background-color: rgba(255, 183, 197, 0.6) !important;
     }
+    .avatar {
+      background-color: $purple !important;
+      color: $gold !important;
+    }
   }
   .msg-previews:hover, .msg-backbtn:hover {
     cursor: pointer;

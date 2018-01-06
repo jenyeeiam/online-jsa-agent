@@ -159,10 +159,10 @@ class MessagesCoaches extends React.Component {
       let firstMsg = findIndex(messages, (o) => o.player_id === id);
       msgPreviews.push(messages[firstMsg])
     });
-
+    let playerName = players ? players.find(p => p.id == playerIds[playerMsgsVisible]).name : '';
     return (
       <div className='my-messages'>
-        {!msgPreviewDisplay && <h3 className="msg-backbtn" onClick={this.handleToggleMsgContainers}>Back</h3>}
+        {!msgPreviewDisplay && <h3 className="msg-backbtn" onClick={this.handleToggleMsgContainers}>バック</h3>}
         {messages.length === 0 && <div>
           <h2>No messages yet. Communicate with a player by sending her a message!</h2>
           <Link to="/players-list">
@@ -184,16 +184,14 @@ class MessagesCoaches extends React.Component {
                     className={i === playerMsgsVisible ? 'active' : ''}
                   >
                     <CardHeader
-                      title={`Player ${players[playerIndex].name}`}
+                      title={`${players[playerIndex].name || 'No Name'}`}
                       subtitle={truncate(msg.japanese_text, {length: 50})}
                       avatar={<Avatar
-                        color={'#ffbc49'}
-                        backgroundColor={'#542e68'}
-                        size={50}
-                    >
-                        {msg.player_id}
-                      </Avatar>}
+                        className='avatar'
+                        icon={<i className="material-icons avatar">account_circle</i>} />}
                     />
+
+
                   </Card>
                 )
               })}
@@ -204,7 +202,7 @@ class MessagesCoaches extends React.Component {
             className='message-container'
             style={{display: msgContainerDisplay ? 'block' : 'none'}}
           >
-            <h2>Player {playerIds[playerMsgsVisible]}</h2>
+            <h2>選手とし {playerName}</h2>
             <div className='messages'>
               <div className="text-input">
                 <TextField
@@ -217,14 +215,14 @@ class MessagesCoaches extends React.Component {
                   onChange={(e, newVal) => this.handleChange(newVal)}
                 />
                 <RaisedButton
-                  label="Send"
+                  label="送信する"
                   primary={true}
                   style={{float: 'right'}}
                   onClick={this.handleSubmit}
                 />
               </div>
               {mainContainerMsgs.map((msg, i) => {
-                let sender = msg.sender === 'coach' ? 'Me' : 'Player'
+                let sender = msg.sender === 'coach' ? '私' : '選手とし'
                 return (
                   <div key={i}>
                     <h4 className='sender-datetime'>{`${sender} at ${moment(msg.created_at).format('ddd MMM Do YYYY, h:mm:ss a')}`}</h4>
