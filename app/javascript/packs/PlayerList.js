@@ -105,7 +105,7 @@ export default class PlayerList extends React.Component {
       </Dialog>
       {localStorage.getItem('token') && <div>
         {players.map((player, index) => {
-          let subtitle = `スタイル: ${player.bats} ${'\u00B7'} ${player.throws} ${'\u00A0'}|${'\u00A0'} `;
+          let subtitle = `スタイル: ${rightLeft[player.bats]}打ち ${'\u00B7'} ${rightLeft[player.throws]}投げ ${'\u00A0'}|${'\u00A0'} `;
           subtitle += `打率: ${player.batting_avg}`
           if(/P/.test(player.position)) {
             subtitle += ` | 防御率: ${player.era}`
