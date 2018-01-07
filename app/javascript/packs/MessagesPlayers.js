@@ -14,7 +14,7 @@ function fetchMessages() {
     url: `/messages?auth_token=${localStorage.getItem('token')}`
   }).then(response => {
     if(response.data.error) {
-      this.setState({error: respose.data.error})
+      this.setState({error: response.data.error})
     } else {
       this.setState({messages: response.data})
     }
@@ -29,7 +29,6 @@ class MessagesPlayers extends React.Component {
     super(props);
     this.handleSetVisibleMessages = this.handleSetVisibleMessages.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleResize = this.handleResize.bind(this);
     this.handleToggleMsgContainers = this.handleToggleMsgContainers.bind(this);
 
     this.state = {
@@ -43,7 +42,6 @@ class MessagesPlayers extends React.Component {
 
   componentDidMount() {
     this.handleFetchMessages();
-    // window.addEventListener('resize', this.handleResize);
     this.setState({windowWidth: screen.width});
     if(screen.width < 700) {
       this.setState({msgContainerDisplay: false});
@@ -54,17 +52,16 @@ class MessagesPlayers extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    // window.removeEventListener('resize', this.handleResize);
-  }
-
   handleFetchMessages() {
     axios({
       method: 'get',
       url: `/messages?auth_token=${localStorage.getItem('token')}`
     }).then(response => {
       if(response.data.error) {
-        this.setState({error: respose.data.error})
+        this.setState({error: response.data.error});
+        if(response.data.error === "Please sign in again") {
+          localStorage.removeItem('token')
+        }
       } else {
         this.setState({messages: response.data})
       }
@@ -72,17 +69,6 @@ class MessagesPlayers extends React.Component {
     .catch(error => {
       this.setState({error: 'Messages failed to load 😢'})
     })
-  }
-
-  handleResize() {
-    this.setState({windowWidth: window.innerWidth});
-    if(window.innerWidth < 700) {
-      this.setState({msgContainerDisplay: false});
-      this.setState({msgPreviewDisplay: true});
-    } else {
-      this.setState({msgContainerDisplay: true});
-      this.setState({msgPreviewDisplay: true});
-    }
   }
 
   handleSetVisibleMessages(index) {
@@ -141,7 +127,15 @@ class MessagesPlayers extends React.Component {
   }
 
   render () {
-    const {messages, coachMsgsVisible, message, windowWidth, msgContainerDisplay, msgPreviewDisplay} = this.state;
+    const {
+      messages,
+      coachMsgsVisible,
+      message,
+      windowWidth,
+      msgContainerDisplay,
+      msgPreviewDisplay,
+      error
+    } = this.state;
     // array to hold the first message for each unique message stream
     const msgPreviews = [];
       // unique player ids
@@ -155,75 +149,78 @@ class MessagesPlayers extends React.Component {
 
     return (
       <div className='my-messages'>
-        {messages.length === 0 && <h1>No messages yet. When a coach has messaged you, you will recieve an email from us.</h1>}
-        {!msgPreviewDisplay && <h3 className="msg-backbtn" onClick={this.handleToggleMsgContainers}>Back</h3>}
-        {messages.length > 0 && <div>
-          <GridList cols={3} cellHeight='auto' padding={5}>
-            <GridTile
-              cols={msgContainerDisplay ? 1 : 3}
-              style={{display: msgPreviewDisplay ? 'block' : 'none'}}
-            >
-              <div className='msg-previews'>
-                {msgPreviews.map((msg, i) => {
-                  return(
-                    <Card
-                      key={msg.id}
-                      onClick={() => this.handleSetVisibleMessages(i)}
-                      className={i === coachMsgsVisible ? 'active' : ''}
-                    >
-                      <CardHeader
-                        title={`Coach ${msg.coach_id}`}
-                        subtitle={truncate(msg.text, {length: 50})}
-                        avatar={<Avatar
-                          color={'#ffbc49'}
-                          backgroundColor={'#542e68'}
-                          size={50}
+        {error && <h2>{error}</h2>}
+        {localStorage.getItem('token') && <div>
+          {messages.length === 0 && <h1>No messages yet. When a coach has messaged you, you will recieve an email from us.</h1>}
+          {!msgPreviewDisplay && <h3 className="msg-backbtn" onClick={this.handleToggleMsgContainers}>Back</h3>}
+          {messages.length > 0 && <div>
+            <GridList cols={3} cellHeight='auto' padding={5}>
+              <GridTile
+                cols={msgContainerDisplay ? 1 : 3}
+                style={{display: msgPreviewDisplay ? 'block' : 'none'}}
+              >
+                <div className='msg-previews'>
+                  {msgPreviews.map((msg, i) => {
+                    return(
+                      <Card
+                        key={msg.id}
+                        onClick={() => this.handleSetVisibleMessages(i)}
+                        className={i === coachMsgsVisible ? 'active' : ''}
                       >
-                          {msg.coach_id}
-                        </Avatar>}
-                      />
-                    </Card>
-                  )
-                })}
-              </div>
-            </GridTile>
-            <GridTile
-              cols={msgPreviewDisplay ? 2 : 3}
-              className='message-container'
-              style={{display: msgContainerDisplay ? 'block' : 'none'}}
-            >
-              <h2>Coach {coachIds[coachMsgsVisible]}</h2>
-              <div className='messages'>
-                <div className="text-input">
-                  <TextField
-                    value={message}
-                    autoFocus={true}
-                    hintText="Type a message..."
-                    multiLine={true}
-                    fullWidth={true}
-                    onKeyPress={(ev) => {if(ev.key === 'Enter') {this.handleSubmit()}}}
-                    onChange={(e, newVal) => this.handleChange(newVal)}
-                  />
-                  <RaisedButton
-                    label="Send"
-                    primary={true}
-                    style={{float: 'right'}}
-                    onClick={this.handleSubmit}
-                  />
+                        <CardHeader
+                          title={`Coach ${msg.coach_id}`}
+                          subtitle={truncate(msg.text, {length: 50})}
+                          avatar={<Avatar
+                            color={'#ffbc49'}
+                            backgroundColor={'#542e68'}
+                            size={50}
+                        >
+                            {msg.coach_id}
+                          </Avatar>}
+                        />
+                      </Card>
+                    )
+                  })}
                 </div>
-                {mainContainerMsgs.map((msg, i) => {
-                  let sender = msg.sender === 'player' ? 'Me' : 'Coach'
-                  return (
-                    <div key={i}>
-                      <h4 className='sender-datetime'>{`${sender} at ${moment(msg.created_at).format('ddd MMM Do YYYY, h:mm:ss a')}`}</h4>
-                      <p>{msg.text}</p>
-                      <p className='japanese-text'>{msg.japanese_text}</p>
-                    </div>
-                  )
-                })}
-              </div>
-            </GridTile>
-          </GridList>
+              </GridTile>
+              <GridTile
+                cols={msgPreviewDisplay ? 2 : 3}
+                className='message-container'
+                style={{display: msgContainerDisplay ? 'block' : 'none'}}
+              >
+                <h2>Coach {coachIds[coachMsgsVisible]}</h2>
+                <div className='messages'>
+                  <div className="text-input">
+                    <TextField
+                      value={message}
+                      autoFocus={true}
+                      hintText="Type a message..."
+                      multiLine={true}
+                      fullWidth={true}
+                      onKeyPress={(ev) => {if(ev.key === 'Enter') {this.handleSubmit()}}}
+                      onChange={(e, newVal) => this.handleChange(newVal)}
+                    />
+                    <RaisedButton
+                      label="Send"
+                      primary={true}
+                      style={{float: 'right'}}
+                      onClick={this.handleSubmit}
+                    />
+                  </div>
+                  {mainContainerMsgs.map((msg, i) => {
+                    let sender = msg.sender === 'player' ? 'Me' : 'Coach'
+                    return (
+                      <div key={i}>
+                        <h4 className='sender-datetime'>{`${sender} at ${moment(msg.created_at).format('ddd MMM Do YYYY, h:mm:ss a')}`}</h4>
+                        <p>{msg.text}</p>
+                        <p className='japanese-text'>{msg.japanese_text}</p>
+                      </div>
+                    )
+                  })}
+                </div>
+              </GridTile>
+            </GridList>
+          </div>}
         </div>}
       </div>
     )

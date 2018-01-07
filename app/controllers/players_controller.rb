@@ -5,16 +5,21 @@ class PlayersController < ApplicationController
     if auth_token != 'null' && authenticate_coach(auth_token)
       render json: Player.order(id: :desc)
     else
-      render json: {error: "Not Authenticated"}
+      render json: {error: "Please sign in again"}
     end
   end
 
   def edit
+    auth_token = request.headers['token']
     player = Player.find(params[:id])
-    if player
-      render json: {player: player, videos: player.videos}
+    if auth_token != 'null' && authenticate_player(auth_token)
+      if player
+        render json: {player: player, videos: player.videos}
+      else
+        render json: {error: "No player found"}
+      end
     else
-      render json: {error: "No player found"}
+      render json: {error: "Please sign in again"}
     end
   end
 
@@ -45,8 +50,8 @@ class PlayersController < ApplicationController
       end
       # translate the accolades
       @player.translate_accolades(params[:accolades])
-      payload = {data: @player.email}
-      token = JWT.encode payload, nil, 'none'
+      payload = {data: @player.email, exp: Time.now.to_i + 4*3600}
+      token = JWT.encode payload, Rails.application.secrets[:hmac_secret], 'HS256'
       render json: {token: token, id: @player.id}
     else
       render json: {error: 'couldnt save'}

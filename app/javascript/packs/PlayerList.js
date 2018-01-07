@@ -62,7 +62,7 @@ export default class PlayerList extends React.Component {
     axios.get('/players', {headers: {'token': localStorage.getItem('token')}})
     .then(response => {
       if(keys(response.data)[0] === 'error') {
-        this.setState({error: response.data.error})
+        this.setState({error: response.data.error});
       } else {
         this.setState({players: response.data})
       }
@@ -81,7 +81,7 @@ export default class PlayerList extends React.Component {
       />
     ];
     return <div className="players-list">
-      {error && <p>{error}</p>}
+      {error && <h2>{error}</h2>}
       <Dialog
           title="ビデオ"
           actions={actions}
@@ -103,44 +103,46 @@ export default class PlayerList extends React.Component {
           })}
           {videos.length === 0 && <h3>ビデオはありません</h3>}
       </Dialog>
-      {players.map((player, index) => {
-        let subtitle = `スタイル: ${player.bats} ${'\u00B7'} ${player.throws} ${'\u00A0'}|${'\u00A0'} `;
-        subtitle += `打率: ${player.batting_avg}`
-        if(/P/.test(player.position)) {
-          subtitle += ` | 防御率: ${player.era}`
-        }
-        //if player has more than one position
-        let position = player.position;
-        let translatedPosition;
-        if(/,/.test(position)) {
-          let positionArray = position.split(', ');
-          translatedPosition = positionArray.map(p => positionsLookup[p]).join(', ');
-        } else {
-          translatedPosition = positionsLookup[position]
-        }
+      {localStorage.getItem('token') && <div>
+        {players.map((player, index) => {
+          let subtitle = `スタイル: ${player.bats} ${'\u00B7'} ${player.throws} ${'\u00A0'}|${'\u00A0'} `;
+          subtitle += `打率: ${player.batting_avg}`
+          if(/P/.test(player.position)) {
+            subtitle += ` | 防御率: ${player.era}`
+          }
+          //if player has more than one position
+          let position = player.position;
+          let translatedPosition;
+          if(/,/.test(position)) {
+            let positionArray = position.split(', ');
+            translatedPosition = positionArray.map(p => positionsLookup[p]).join(', ');
+          } else {
+            translatedPosition = positionsLookup[position]
+          }
 
-        return (
-          <Card key={player.id}>
-            <CardHeader
-              title={`ポジション: ${translatedPosition || ''}`}
-              subtitle={subtitle}
-            />
-          <CardTitle title={player.name} subtitle={`出身校: ${player.alma_mater}`} />
-            <CardText>
-              <p>{player.accolades}</p>
-              <p>{player.japanese_accolades}</p>
-            </CardText>
-            <CardActions>
-              <Link to={`/message/${player.id}`}>
-                <FlatButton label={`${player.name}にメッセージを送る`} secondary={true}/>
-              </Link>
-              <FlatButton label='ビデオ' secondary={true} onClick={() => {
-                this.handleFetchVideos(player.id);
-                this.handleOpen();
-              }}/>
-            </CardActions>
-          </Card>)
-      })}
+          return (
+            <Card key={player.id}>
+              <CardHeader
+                title={`ポジション: ${translatedPosition || ''}`}
+                subtitle={subtitle}
+              />
+            <CardTitle title={player.name} subtitle={`出身校: ${player.alma_mater}`} />
+              <CardText>
+                <p>{player.accolades}</p>
+                <p>{player.japanese_accolades}</p>
+              </CardText>
+              <CardActions>
+                <Link to={`/message/${player.id}`}>
+                  <FlatButton label={`${player.name}にメッセージを送る`} secondary={true}/>
+                </Link>
+                <FlatButton label='ビデオ' secondary={true} onClick={() => {
+                  this.handleFetchVideos(player.id);
+                  this.handleOpen();
+                }}/>
+              </CardActions>
+            </Card>)
+          })}
+      </div>}
     </div>
   }
 }

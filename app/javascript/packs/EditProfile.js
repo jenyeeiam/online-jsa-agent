@@ -77,7 +77,10 @@ class EditProfile extends React.Component {
     axios.get(`/players/${this.props.match.params.player_id}/edit`, {headers: {'token': localStorage.getItem('token')}})
     .then(response => {
       if(keys(response.data)[0] === 'error') {
-        this.setState({error: response.data.error})
+        this.setState({error: response.data.error});
+        if(response.data.error === "Please sign in again") {
+          localStorage.removeItem('token')
+        }
       } else {
         const player = response.data.player;
         const videos = response.data.videos;
@@ -233,153 +236,155 @@ class EditProfile extends React.Component {
     return <div className="player-registration registration-form">
       {error && <h3>{error}</h3>}
       {success && <Redirect to="/my-messages/player"/>}
-      <h1>Account Information</h1>
-      <div className="player-info">
-        <div className="name">
-          <TextField
-            autoFocus={true}
-            hintText="Name"
-            onChange={(e, newVal) => this.handleChangeName(newVal)}
-            value={name}
-          />
+      {localStorage.getItem('token') && <div>
+        <h1>Account Information</h1>
+        <div className="player-info">
+          <div className="name">
+            <TextField
+              autoFocus={true}
+              hintText="Name"
+              onChange={(e, newVal) => this.handleChangeName(newVal)}
+              value={name}
+            />
+          </div>
+          <div className="email">
+            <TextField
+              hintText="Email"
+              errorText={validateEmail(email) ? '' : "Provide a valid email"}
+              onChange={(e, newVal) => this.handleChangeEmail(newVal)}
+              value={email}
+            />
+          </div>
+          <div className="password">
+            <TextField
+              hintText="Password"
+              errorText={"Change password (optional)"}
+              type="password"
+              onChange={(e, newVal) => this.handleChangePassword(newVal)}
+              value={password}
+            />
+          </div>
         </div>
-        <div className="email">
-          <TextField
-            hintText="Email"
-            errorText={validateEmail(email) ? '' : "Provide a valid email"}
-            onChange={(e, newVal) => this.handleChangeEmail(newVal)}
-            value={email}
-          />
+        <h1>Player Information</h1>
+        <div className='player-merits'>
+          <div className='bats'>
+            <SelectField
+              value={bats}
+              floatingLabelText="Bats"
+              onChange={this.handleChangeBats}
+              style={{width: '50%', marginRight: '10px'}}
+            >
+              <MenuItem value={'R'} primaryText="Right" />
+              <MenuItem value={'L'} primaryText="Left" />
+            </SelectField>
+          </div>
+          <div className='throws'>
+            <SelectField
+              value={throws}
+              floatingLabelText="Throws"
+              onChange={this.handleChangeThrows}
+              style={{width: '50%', marginRight: '10px'}}
+            >
+              <MenuItem value={'R'} primaryText="Right" />
+              <MenuItem value={'L'} primaryText="Left" />
+            </SelectField>
+          </div>
+          <div className='position'>
+            <SelectField
+              value={position}
+              floatingLabelText="Position(s)"
+              onChange={this.handleChangePosition}
+              style={{width: '50%'}}
+              multiple={true}
+            >
+              {positions.map((pos, i) => <MenuItem key={i} value={pos} primaryText={pos} />)}
+            </SelectField>
+          </div>
+          <div className="avg">
+            <span className='span-labels'>Batting Average last season {battingAvg}</span>
+            <Slider
+              defaultValue={battingAvg}
+              value={battingAvg}
+              step={0.001}
+              style={{width: '80%'}}
+              max={0.7}
+              onChange={(e, newVal) => this.handleChangeBattingAvg(newVal)}
+            />
+          </div>
+          <div className="era">
+            <span className='span-labels'>ERA last season {era}</span>
+            <Slider
+              defaultValue={0}
+              max={5}
+              value={era}
+              style={{width: '80%'}}
+              onChange={(e, newVal) => this.handleChangeEra(newVal)}
+            />
+          </div>
+          <div className="college">
+            <TextField
+              value={almaMater}
+              hintText="College"
+              onChange={(e, newVal) => this.handleChangeAlmaMater(newVal)}
+            />
+          </div>
+          <div className="accolades">
+            <TextField
+              value={accolades}
+              hintText="Accolades"
+              multiLine={true}
+              fullWidth={true}
+              onChange={(e, newVal) => this.handleChangeAccolades(newVal)}
+            />
+          </div>
         </div>
-        <div className="password">
-          <TextField
-            hintText="Password"
-            errorText={"Change password (optional)"}
-            type="password"
-            onChange={(e, newVal) => this.handleChangePassword(newVal)}
-            value={password}
-          />
+        <h1>Videos</h1>
+        <div className="video-urls">
+          <div className="inline-box-button">
+            <TextField
+              name='1'
+              style={{width: '45%'}}
+              value={video0}
+              hintText="e.g. https://www.youtube.com/watch..."
+              onChange={(e, newVal) => this.handleChangeVideo('video0', newVal)}
+              errorText={video0Error}
+            />
+          </div>
+          <div className="inline-box-button">
+            <TextField
+              name='2'
+              value={video1}
+              style={{width: '45%'}}
+              hintText="e.g. https://www.youtube.com/watch..."
+              onChange={(e, newVal) => this.handleChangeVideo('video1', newVal)}
+              errorText={video1Error}
+            />
+          </div>
+          <div className="inline-box-button">
+            <TextField
+              name='3'
+              value={video2}
+              style={{width: '45%'}}
+              hintText="e.g. https://www.youtube.com/watch..."
+              onChange={(e, newVal) => this.handleChangeVideo('video2', newVal)}
+              errorText={video2Error}
+            />
+          </div>
         </div>
-      </div>
-      <h1>Player Information</h1>
-      <div className='player-merits'>
-        <div className='bats'>
-          <SelectField
-            value={bats}
-            floatingLabelText="Bats"
-            onChange={this.handleChangeBats}
-            style={{width: '50%', marginRight: '10px'}}
-          >
-            <MenuItem value={'R'} primaryText="Right" />
-            <MenuItem value={'L'} primaryText="Left" />
-          </SelectField>
-        </div>
-        <div className='throws'>
-          <SelectField
-            value={throws}
-            floatingLabelText="Throws"
-            onChange={this.handleChangeThrows}
-            style={{width: '50%', marginRight: '10px'}}
-          >
-            <MenuItem value={'R'} primaryText="Right" />
-            <MenuItem value={'L'} primaryText="Left" />
-          </SelectField>
-        </div>
-        <div className='position'>
-          <SelectField
-            value={position}
-            floatingLabelText="Position(s)"
-            onChange={this.handleChangePosition}
-            style={{width: '50%'}}
-            multiple={true}
-          >
-            {positions.map((pos, i) => <MenuItem key={i} value={pos} primaryText={pos} />)}
-          </SelectField>
-        </div>
-        <div className="avg">
-          <span className='span-labels'>Batting Average last season {battingAvg}</span>
-          <Slider
-            defaultValue={battingAvg}
-            value={battingAvg}
-            step={0.001}
-            style={{width: '80%'}}
-            max={0.7}
-            onChange={(e, newVal) => this.handleChangeBattingAvg(newVal)}
-          />
-        </div>
-        <div className="era">
-          <span className='span-labels'>ERA last season {era}</span>
-          <Slider
-            defaultValue={0}
-            max={5}
-            value={era}
-            style={{width: '80%'}}
-            onChange={(e, newVal) => this.handleChangeEra(newVal)}
-          />
-        </div>
-        <div className="college">
-          <TextField
-            value={almaMater}
-            hintText="College"
-            onChange={(e, newVal) => this.handleChangeAlmaMater(newVal)}
-          />
-        </div>
-        <div className="accolades">
-          <TextField
-            value={accolades}
-            hintText="Accolades"
-            multiLine={true}
-            fullWidth={true}
-            onChange={(e, newVal) => this.handleChangeAccolades(newVal)}
-          />
-        </div>
-      </div>
-      <h1>Videos</h1>
-      <div className="video-urls">
-        <div className="inline-box-button">
-          <TextField
-            name='1'
-            style={{width: '45%'}}
-            value={video0}
-            hintText="e.g. https://www.youtube.com/watch..."
-            onChange={(e, newVal) => this.handleChangeVideo('video0', newVal)}
-            errorText={video0Error}
-          />
-        </div>
-        <div className="inline-box-button">
-          <TextField
-            name='2'
-            value={video1}
-            style={{width: '45%'}}
-            hintText="e.g. https://www.youtube.com/watch..."
-            onChange={(e, newVal) => this.handleChangeVideo('video1', newVal)}
-            errorText={video1Error}
-          />
-        </div>
-        <div className="inline-box-button">
-          <TextField
-            name='3'
-            value={video2}
-            style={{width: '45%'}}
-            hintText="e.g. https://www.youtube.com/watch..."
-            onChange={(e, newVal) => this.handleChangeVideo('video2', newVal)}
-            errorText={video2Error}
-          />
-        </div>
-      </div>
-      <div className='signup-btns'>
-        <RaisedButton
-          label="Edit Profile"
-          primary={true}
-          onClick={() => this.handleSubmit()}
-        />
-        <Link to="/">
-          <FlatButton
-            label="Back Home"
+        <div className='signup-btns'>
+          <RaisedButton
+            label="Edit Profile"
             primary={true}
+            onClick={() => this.handleSubmit()}
           />
-        </Link>
-      </div>
+          <Link to="/">
+            <FlatButton
+              label="Back Home"
+              primary={true}
+            />
+          </Link>
+        </div>
+      </div>}
     </div>
   }
 }

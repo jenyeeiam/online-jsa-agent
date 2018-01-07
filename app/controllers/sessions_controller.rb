@@ -4,8 +4,8 @@ class SessionsController < ApplicationController
   end
 
   def login
-    payload = {data: params[:email]}
-    token = JWT.encode payload, nil, 'none'
+    payload = {data: params[:email], exp: Time.now.to_i + 4*3600}
+    token = JWT.encode payload, Rails.application.secrets[:hmac_secret], 'HS256'
     if Player.find_by(email: params[:email]).try(:authenticate, params[:password])
       puts 'player login'
       render json: {

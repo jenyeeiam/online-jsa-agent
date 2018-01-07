@@ -17,6 +17,8 @@ class MessagesController < ApplicationController
         coach = Coach.includes(:messages, :players).where(id: user.id)
         render json: {messages: coach.first.messages.order(id: :desc), players: coach.first.players.distinct(:id)}
       end
+    else
+      render json: {:error => "Please sign in again"}
     end
   end
 
