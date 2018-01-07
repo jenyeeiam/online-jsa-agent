@@ -149,7 +149,7 @@ class MessagesPlayers extends React.Component {
 
     return (
       <div className='my-messages'>
-        {error && <h2>{error}</h2>}
+        {error && <h2 className="error-msg">{error}</h2>}
         {localStorage.getItem('token') && <div>
           {messages.length === 0 && <h1>No messages yet. When a coach has messaged you, you will recieve an email from us.</h1>}
           {!msgPreviewDisplay && <h3 className="msg-backbtn" onClick={this.handleToggleMsgContainers}>Back</h3>}

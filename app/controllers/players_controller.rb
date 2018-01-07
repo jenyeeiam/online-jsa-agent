@@ -5,7 +5,7 @@ class PlayersController < ApplicationController
     if auth_token != 'null' && authenticate_coach(auth_token)
       render json: Player.order(id: :desc)
     else
-      render json: {error: "Please sign in again"}
+      render json: {error: "もう1度ログインして下さい"}
     end
   end
 

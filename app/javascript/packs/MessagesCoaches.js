@@ -150,11 +150,11 @@ class MessagesCoaches extends React.Component {
     let playerName = players.length > 0 ? players.find(p => p.id == playerIds[playerMsgsVisible]).name : '';
     return (
       <div className='my-messages'>
-        {error && <h2>{error}</h2>}
+        {error && <h2 className="error-msg">{error}</h2>}
         {localStorage.getItem('token') && <div>
           {!msgPreviewDisplay && <h3 className="msg-backbtn" onClick={this.handleToggleMsgContainers}>バック</h3>}
           {messages.length === 0 && <div>
-            <h2>No messages yet. Communicate with a player by sending her a message!</h2>
+            <h2>まだメッセージがありません。コーチのみ、会話を始める事ができます</h2>
             <Link to="/players-list">
               <RaisedButton label="選手の情報て" primary={true}/>
             </Link>
@@ -198,7 +198,7 @@ class MessagesCoaches extends React.Component {
                   <TextField
                     value={message}
                     autoFocus={true}
-                    hintText="メッセージを入力..."
+                    hintText="メッセージを入力して下さい"
                     multiLine={true}
                     fullWidth={true}
                     onKeyPress={(ev) => {if(ev.key === 'Enter') {this.handleSubmit()}}}

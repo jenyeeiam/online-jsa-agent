@@ -81,7 +81,7 @@ export default class PlayerList extends React.Component {
       />
     ];
     return <div className="players-list">
-      {error && <h2>{error}</h2>}
+      {error && <h2 className="error-msg">{error}</h2>}
       <Dialog
           title="ビデオ"
           actions={actions}

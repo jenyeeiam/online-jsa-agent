@@ -234,7 +234,7 @@ class EditProfile extends React.Component {
     } = this.state;
 
     return <div className="player-registration registration-form">
-      {error && <h3>{error}</h3>}
+      {error && <h3 className="error-msg">{error}</h3>}
       {success && <Redirect to="/my-messages/player"/>}
       {localStorage.getItem('token') && <div>
         <h1>Account Information</h1>

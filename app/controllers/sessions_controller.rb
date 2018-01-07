@@ -17,7 +17,7 @@ class SessionsController < ApplicationController
       puts 'coach login'
       render json: {token: token, user: 'coach', id: Coach.find_by(email: params[:email]).id}
     else
-      render json: {error: 'Incorrect email or password'}
+      render json: {error: 'Incorrect email or password. 不正確な電子メールまたはパスワード'}
     end
   end
 end
