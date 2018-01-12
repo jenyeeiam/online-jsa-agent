@@ -5,6 +5,7 @@ import RaisedButton from "material-ui/RaisedButton";
 import FlatButton from 'material-ui/FlatButton';
 import {keys} from 'lodash';
 import axios from 'axios';
+import { sendMessage } from "./api_requests/post_requests";
 
 class NewMessage extends React.Component {
   constructor(props) {
@@ -24,28 +25,21 @@ class NewMessage extends React.Component {
   handleSubmit() {
     const {messageText, messageTitle} = this.state;
     if(messageText.length > 0) {
-      axios({
-        method: 'post',
-        url: '/messages',
-        headers: {
-          "Content-Type": "application/json",
-          'X-Requested-With': 'XMLHttpRequest',
-          "X-CSRF-Token": document.getElementsByTagName("meta")[1].content
-        },
-        data: {
-          message_text: messageText,
-          auth_token: localStorage.getItem('token'),
-          player_id: Number(this.props.match.params.player_id)
-        }
-      }).then(response => {
-        if(keys(response.data)[0] === 'error') {
-          this.setState({error: response.data.error})
-        } else {
-          this.setState({messageText: '', success: true, error: ''})
-        }
-      }).catch(error => {
-        this.setState({error: 'Message failed to send 😢'})
-      })
+      const messagePayload = {
+        message_text: messageText,
+        auth_token: localStorage.getItem('token'),
+        player_id: Number(this.props.match.params.player_id)
+      };
+      sendMessage(messagePayload)
+        .then(response => {
+          if(keys(response)[0] === 'error') {
+            this.setState({error: response.error})
+          } else {
+            this.setState({messageText: '', success: true, error: ''})
+          }
+        })
+        .catch(error => this.setState({error: error}))
+      
     }
   }
 
