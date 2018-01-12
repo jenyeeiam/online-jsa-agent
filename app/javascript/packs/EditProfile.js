@@ -9,45 +9,10 @@ import Slider from 'material-ui/Slider';
 import MenuItem from 'material-ui/MenuItem';
 import axios from 'axios';
 import {replace, keys} from 'lodash';
-
-const positions = [
-  'LF',
-  'CF',
-  'RF',
-  '3B',
-  'SS',
-  '2B',
-  '1B',
-  'P',
-  'C'
-];
-
-function validateEmail(email) {
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if(email){
-      return re.test(email.toLowerCase());
-    } else {
-      return null
-    }
-}
-
-function validateYoutube(url) {
-  let link;
-  let urlError = '';
-  if(/youtube/.test(url) || /youtu.be/.test(url)) {
-    if(/watch/.test(url)) {
-      link = replace(url, 'watch?v=', '');
-      link = replace(link, 'youtube.com/', 'youtube.com/embed/');
-    } else {
-      link = replace(url, 'youtu.be.com/', 'www.youtube.com/embed/');
-    };
-    link += '?rel=0'
-    return link
-  } else {
-    urlError = 'Provide a valid YouTube link'
-    return null
-  }
-}
+import { validateEmail, validateYoutube } from "./shared/functions";
+import { fetchPlayer } from "./api_requests/get_requests";
+import { editProfile } from "./api_requests/post_requests";
+import { positions } from "./shared/constants";
 
 class EditProfile extends React.Component {
   constructor(props) {
@@ -74,36 +39,29 @@ class EditProfile extends React.Component {
 
   componentDidMount() {
     this.setState({token: document.getElementsByTagName("meta")[1].content});
-    axios.get(`/players/${this.props.match.params.player_id}/edit`, {headers: {'token': localStorage.getItem('token')}})
-    .then(response => {
-      if(keys(response.data)[0] === 'error') {
-        this.setState({error: response.data.error});
-        if(response.data.error === "Please sign in again") {
-          localStorage.removeItem('token')
-        }
-      } else {
-        const player = response.data.player;
-        const videos = response.data.videos;
-        this.setState({
-          name: player.name,
-          position: player.position.split(', '),
-          bats: player.bats,
-          throws: player.throws,
-          email: player.email,
-          almaMater: player.alma_mater,
-          accolades: player.accolades,
-          battingAvg: player.batting_avg,
-          era: player.era
-        });
+    fetchPlayer(this.props.match.params.player_id)
+      .then(response => {
+        const player = response.player;
+        const videos = response.videos;
         const videoState = {}
         videos.forEach((vid, i) => {
           videoState[`video${i}`] = vid.url
         });
         this.setState(videoState);
-      }
-    }).catch(error => {
-      this.setState({error: "Couldn't retreive player"})
-    })
+        this.setState({
+          name: player.name || '',
+          position: player.position.split(', ') || '',
+          bats: player.bats  || '',
+          throws: player.throws  || '',
+          email: player.email || '',
+          almaMater: player.alma_mater || '',
+          accolades: player.accolades || '',
+          battingAvg: player.batting_avg || 0,
+          era: player.era || 0
+        });
+      })
+      .catch(error => this.setState(error))
+
   }
 
   handleChangeVideo(video, text) {
@@ -181,34 +139,26 @@ class EditProfile extends React.Component {
         validateYoutube(video2)
       ];
       const videosWithLinks = videos.filter(v => !!v);
-      axios({
-        method: 'patch',
-        url: `/players/${localStorage.getItem('id')}`,
-        headers: {
-          "Content-Type": "application/json",
-          'X-Requested-With': 'XMLHttpRequest',
-          "X-CSRF-Token": document.getElementsByTagName("meta")[1].content
-        },
-        data: {
-          name,
-          position: position.join(', '),
-          bats,
-          throws,
-          email: email.toLowerCase(),
-          alma_mater: almaMater,
-          accolades,
-          batting_avg: battingAvg,
-          era,
-          password,
-          videos: videosWithLinks
-        }
-      }).then((response) => {
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', 'player');
-        this.setState({success: true})
-      }).catch((error) => {
-        this.setState({error: 'Profile unable to be saved 😢'})
-      });
+      const profileData = {
+        name,
+        position: position.join(', '),
+        bats,
+        throws,
+        email: email.toLowerCase(),
+        alma_mater: almaMater,
+        accolades,
+        batting_avg: battingAvg,
+        era,
+        password,
+        videos: videosWithLinks
+      };
+      editProfile(profileData)
+        .then(response => {
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('user', 'player');
+          this.setState({success: true})
+        })
+        .catch(error => this.setState({error: error}))
     }
   }
 

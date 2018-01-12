@@ -3,7 +3,7 @@ class CoachesController < ApplicationController
     if params
       c = Coach.new coach_params
       if c.save
-        payload = {data: c.email, exp: Time.now.to_i + 4*3600}
+        payload = {data: c.email}
         token = JWT.encode payload, Rails.application.secrets[:hmac_secret], 'HS256'
         render json: {token: token}
       else

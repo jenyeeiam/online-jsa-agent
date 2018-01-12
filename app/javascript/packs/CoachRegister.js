@@ -4,11 +4,8 @@ import FlatButton from "material-ui/FlatButton";
 import TextField from 'material-ui/TextField';
 import { Link, Redirect } from "react-router-dom";
 import axios from 'axios';
-
-function validateEmail(email) {
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email.toLowerCase());
-}
+import { createCoach } from "./api_requests/post_requests";
+import { validateEmail } from "./shared/functions";
 
 function validateParams(team, password) {
   return team.length > 0 && password.length > 5
@@ -51,26 +48,15 @@ export default class CoachRegister extends React.Component {
     } else if (!validateParams(team, password)) {
       this.setState({error: 'Fill in all required fields'})
     } else {
-      axios({
-        method: 'post',
-        url: '/coaches',
-        headers: {
-          "Content-Type": "application/json",
-          'X-Requested-With': 'XMLHttpRequest',
-          "X-CSRF-Token": document.getElementsByTagName("meta")[1].content
-        },
-        data: {
-          team,
-          email: email.toLowerCase(),
-          password
-        }
-      }).then((response) => {
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', 'coach');
-        this.setState({signedIn: true})
-      }).catch((error) => {
-        this.setState({error: 'Accont unable to be saved 😢'})
-      });
+      createCoach(team, email.toLowerCase(), password)
+        .then(response => {
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('user', 'coach');
+          this.setState({signedIn: true})
+        })
+        .catch(error => {
+          this.setState({error: error})
+        })
     }
   }
 
