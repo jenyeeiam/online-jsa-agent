@@ -7,22 +7,8 @@ import TextField from 'material-ui/TextField';
 import Avatar from 'material-ui/Avatar';
 import {keys, truncate, uniqBy, findIndex} from "lodash";
 import moment from 'moment';
-
-function fetchMessages() {
-  axios({
-    method: 'get',
-    url: `/messages?auth_token=${localStorage.getItem('token')}`
-  }).then(response => {
-    if(response.data.error) {
-      this.setState({error: response.data.error})
-    } else {
-      this.setState({messages: response.data})
-    }
-  })
-  .catch(error => {
-    this.setState({error: 'Messages failed to load 😢'})
-  })
-}
+import { fetchMessages } from "./api_requests/get_requests";
+import { sendMessage } from "./api_requests/post_requests";
 
 class MessagesPlayers extends React.Component {
   constructor(props) {
@@ -41,7 +27,11 @@ class MessagesPlayers extends React.Component {
   }
 
   componentDidMount() {
-    this.handleFetchMessages();
+    fetchMessages()
+      .then(response => {
+        this.setState({messages: response})
+      })
+      .catch(error =>  this.setState({error: error}))
     this.setState({windowWidth: screen.width});
     if(screen.width < 700) {
       this.setState({msgContainerDisplay: false});
@@ -52,32 +42,12 @@ class MessagesPlayers extends React.Component {
     }
   }
 
-  handleFetchMessages() {
-    axios({
-      method: 'get',
-      url: `/messages?auth_token=${localStorage.getItem('token')}`
-    }).then(response => {
-      if(response.data.error) {
-        this.setState({error: response.data.error});
-        if(response.data.error === "Please sign in again") {
-          localStorage.removeItem('token')
-        }
-      } else {
-        this.setState({messages: response.data})
-      }
-    })
-    .catch(error => {
-      this.setState({error: 'Messages failed to load 😢'})
-    })
-  }
-
   handleSetVisibleMessages(index) {
     const {windowWidth} = this.state;
     if(windowWidth < 700) {
       this.setState({msgContainerDisplay: true});
       this.setState({msgPreviewDisplay: false});
     }
-
     this.setState({coachMsgsVisible: index})
   }
 
@@ -98,31 +68,23 @@ class MessagesPlayers extends React.Component {
     const coachIds = uniqBy(messages, (p) => p.coach_id).map(msg => msg.coach_id);
 
     if(message.length > 0) {
-      axios({
-        method: 'post',
-        url: '/messages',
-        headers: {
-          "Content-Type": "application/json",
-          'X-Requested-With': 'XMLHttpRequest',
-          "X-CSRF-Token": document.getElementsByTagName("meta")[1].content
-        },
-        data: {
-          message_text: message,
-          auth_token: localStorage.getItem('token'),
-          coach_id: coachIds[coachMsgsVisible]
-        }
-      }).then(response => {
-        if(keys(response.data)[0] === 'error') {
-          this.setState({error: response.data.error})
-        } else {
+      const messagePayload = {
+        message_text: message,
+        auth_token: localStorage.getItem('token'),
+        coach_id: coachIds[coachMsgsVisible]
+      };
+      sendMessage(messagePayload)
+        .then(response => {
           this.setState({messageText: '', success: true, error: ''});
           this.setState({message: ''});
-          this.handleFetchMessages();
-          this.setState({coachMsgsVisible: 0})
-        }
-      }).catch(error => {
-        this.setState({error: 'Message failed to send 😢'})
-      })
+          this.setState({coachMsgsVisible: 0});
+          fetchMessages()
+            .then(res => {
+              this.setState({messages: res})
+            })
+            .catch(error =>  this.setState({error: error}))
+        })
+        .catch(error =>  this.setState({error: error}))
     }
   }
 
