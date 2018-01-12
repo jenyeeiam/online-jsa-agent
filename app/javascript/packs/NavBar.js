@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, Redirect } from "react-router-dom";
-import logo from './logo.png';
+import logo from '../../assets/images/logo.png';
 
 export default class NavBar extends React.Component {
   constructor(props) {

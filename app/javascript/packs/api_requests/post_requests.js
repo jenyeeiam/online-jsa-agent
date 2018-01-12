@@ -73,3 +73,29 @@ export function login(email, password) {
   });
   return promiseObj
 }
+
+export function sendMessage(msgPayload) {
+  const promiseObj = new Promise((resolve, reject) => {
+    axios({
+      method: 'post',
+      url: '/messages',
+      headers: {
+        "Content-Type": "application/json",
+        'X-Requested-With': 'XMLHttpRequest',
+        "X-CSRF-Token": document.getElementsByTagName("meta")[1].content
+      },
+      data: msgPayload
+    })
+    .then(response => {
+      if(keys(response.data)[0] === 'error') {
+        reject(response.data.error)
+      } else {
+        resolve(response.data)
+      }
+    })
+    .catch(error => {
+      reject("Failed to send message")
+    })
+  });
+  return promiseObj
+}
