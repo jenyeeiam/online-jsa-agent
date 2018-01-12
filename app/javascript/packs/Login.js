@@ -5,6 +5,7 @@ import TextField from 'material-ui/TextField';
 import { Link, Redirect } from "react-router-dom";
 import {keys} from "lodash";
 import axios from 'axios';
+import { login } from "./api_requests/post_requests";
 
 class Login extends React.Component {
   constructor(props) {
@@ -28,31 +29,14 @@ class Login extends React.Component {
   handleSubmit() {
     const {email, password} = this.state;
     if(email.length > 0 && password.length > 0) {
-      axios({
-        method: 'post',
-        url: '/login',
-        headers: {
-          "Content-Type": "application/json",
-          'X-Requested-With': 'XMLHttpRequest',
-          "X-CSRF-Token": document.getElementsByTagName("meta")[1].content
-        },
-        data: {
-          email: email.toLowerCase(),
-          password
-        }
-      }).then((response) => {
-        if(keys(response.data)[0] === 'error') {
-          this.setState({error: response.data.error})
-        } else {
-          localStorage.setItem('token', response.data.token);
-          localStorage.setItem('user', response.data.user);
-          localStorage.setItem('id', response.data.id);
-          this.setState({signedIn: true})
-        }
-      })
-        .catch((error) => {
-          console.log(error);
-        });
+      login(email, password)
+        .then(response => {
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('user', response.user);
+          localStorage.setItem('id', response.id);
+          this.setState({signedIn: true});
+        })
+        .catch(error => this.setState({error: error}))
     } else {
       this.setState({error: 'Please fill in all required fields'})
     }
