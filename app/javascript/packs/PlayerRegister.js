@@ -45,7 +45,7 @@ export default class PlayerRegister extends React.Component {
   handleChangeVideo(video, text) {
     const newState = {};
     const url = validateYoutube(text);
-    newState[video] = url ? url : '';
+    newState[video] = text;
     newState[`${video}Error`] = url ? '' : 'Provide a valid YouTube link';
     this.setState(newState);
   }
