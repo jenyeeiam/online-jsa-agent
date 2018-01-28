@@ -112,8 +112,13 @@ export default class PlayerRegister extends React.Component {
     } else if(!validateParams(name, password)) {
       this.setState({error: 'Fill in all required fields'})
     } else {
-      const videos = [firstVideo, secondVideo, thirdVideo];
+      const videos = [
+        firstVideo,
+        secondVideo,
+        thirdVideo
+      ];
       const videosWithLinks = videos.filter(v => v.length > 0);
+      const embedLinks = videosWithLinks.map(v => validateYoutube(v));
       const data = {
         name,
         position: position.join(', '),
@@ -125,7 +130,7 @@ export default class PlayerRegister extends React.Component {
         batting_avg: battingAvg,
         era,
         password,
-        videos: videosWithLinks
+        videos: embedLinks
       };
       createPlayer(data)
         .then(res => {

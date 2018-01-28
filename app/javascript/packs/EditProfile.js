@@ -67,6 +67,7 @@ class EditProfile extends React.Component {
   handleChangeVideo(video, text) {
     const newState = {};
     const url = validateYoutube(text);
+    // Want to display what the person types, but will save it as the embed type
     newState[video] = text;
     newState[`${video}Error`] = url ? '' : 'Provide a valid YouTube link';
     this.setState(newState);
