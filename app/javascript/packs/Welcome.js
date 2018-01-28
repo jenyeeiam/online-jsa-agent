@@ -42,7 +42,7 @@ export default class Welcome extends React.Component {
           <span onClick={this.handleClick}>How does it work?</span>
         </p>}
         {descriptionVisible && (<div>
-          <p className='description'>Nippon Softball connects foreign players with Japanese professional coaches by providing a platform for communication. Players provide their information and accolades as a method to sell themselves to coaches who are not aware of their identity. Like applying for a job, not all submissions will be successful as there are only a few spots available every year for foreign players in Japan. Good luck!</p>
+          <p className='description'>Nippon Softball connects foreign players with Japanese professional coaches by providing a platform for communication. Players provide their information, accolades and skills videos as a method to sell themselves to coaches. Like applying for a job, not all submissions will be successful as there are only a few spots available every year for foreign players in Japan. Good luck!</p>
           <p className="fake-button"><span onClick={this.handleClick}>Hide</span></p>
         </div>)}
         <div className="welcome-buttons">
