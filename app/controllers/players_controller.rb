@@ -3,7 +3,7 @@ class PlayersController < ApplicationController
   def index
     auth_token = request.headers['token']
     if auth_token != 'null' && authenticate_coach(auth_token)
-      render json: Player.order(id: :desc)
+      render json: Player.where(deleted: false).order(id: :desc)
     else
       render json: {error: "もう1度ログインして下さい"}
     end
@@ -43,6 +43,7 @@ class PlayersController < ApplicationController
 
   def create
     @player = Player.new player_params
+    @player.deleted = false
     if @player.save
       # save the videos
       if params[:videos].count > 0

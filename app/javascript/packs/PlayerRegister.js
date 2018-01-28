@@ -11,6 +11,7 @@ import axios from 'axios';
 import {replace} from 'lodash';
 import { validateEmail, validateParams, validateYoutube } from "./shared/functions";
 import { positions } from "./shared/constants";
+import {keys} from "lodash";
 
 export default class PlayerRegister extends React.Component {
   constructor(props) {
@@ -230,7 +231,7 @@ export default class PlayerRegister extends React.Component {
             style={{width: '50%'}}
             multiple={true}
           >
-            {positions.map((pos, i) => <MenuItem key={i} value={pos} primaryText={pos} />)}
+            {keys(positions).map((pos, i) => <MenuItem key={i} value={pos} primaryText={pos} />)}
           </SelectField>
         </div>
         <div className="avg">

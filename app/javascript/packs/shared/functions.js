@@ -20,7 +20,6 @@ export function validateYoutube(url) {
     } else {
       link = replace(url, 'youtu.be.com/', 'www.youtube.com/embed/');
     };
-    link += '?rel=0'
     return link
   } else {
     urlError = 'Provide a valid YouTube link'

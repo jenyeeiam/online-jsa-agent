@@ -5,25 +5,9 @@ import {Card, CardActions, CardHeader, CardTitle, CardText} from 'material-ui/Ca
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import Avatar from 'material-ui/Avatar';
-
+import { fetchVideos, fetchPlayers } from "./api_requests/get_requests";
+import { positions, rightLeft } from "./shared/constants";
 import {keys} from 'lodash';
-
-const positionsLookup = {
-  'P': '投手',
-  'C': 'キャッチャー',
-  '1B': '一塁',
-  '2B': '二塁',
-  '3B': '三塁',
-  'SS': 'ショート',
-  'LF': 'レフト',
-  'RF': 'ライト',
-  'CF': 'センター'
-};
-
-const rightLeft = {
-  'L': '左',
-  'R': '右'
-};
 
 export default class PlayerList extends React.Component {
   constructor(props) {
@@ -46,29 +30,21 @@ export default class PlayerList extends React.Component {
   };
 
   handleFetchVideos(playerId) {
-    axios.get(`/videos?player_id=${playerId}`, {headers: {'token': localStorage.getItem('token')}})
-    .then(response => {
-      if(keys(response.data)[0] === 'error') {
-        this.setState({error: response.data.error})
-      } else {
-        this.setState({videos: response.data})
-      }
-    }).catch(error => {
-      this.setState({error: "Couldn't retreive videos"})
-    })
+    fetchVideos(playerId)
+      .then(res => {
+        this.setState({videos: res})
+      })
+      .catch(error => this.setsState({error: error}))
   }
 
   componentDidMount() {
-    axios.get('/players', {headers: {'token': localStorage.getItem('token')}})
-    .then(response => {
-      if(keys(response.data)[0] === 'error') {
-        this.setState({error: response.data.error});
-      } else {
-        this.setState({players: response.data})
-      }
-    }).catch(error => {
-      this.setState({error: "Couldn't retreive players"})
-    })
+    fetchPlayers()
+      .then(res => {
+        this.setState({players: res})
+      })
+      .catch(error => {
+        this.setState({error: error})
+      })
   }
 
   render() {
@@ -105,7 +81,7 @@ export default class PlayerList extends React.Component {
       </Dialog>
       {localStorage.getItem('token') && <div>
         {players.map((player, index) => {
-          let subtitle = `スタイル: ${rightLeft[player.bats]}打ち ${'\u00B7'} ${rightLeft[player.throws]}投げ ${'\u00A0'}|${'\u00A0'} `;
+          let subtitle = `スタイル: ${rightLeft[player.bats] || ''}打ち ${'\u00B7'} ${rightLeft[player.throws] || ''}投げ ${'\u00A0'}|${'\u00A0'} `;
           subtitle += `打率: ${player.batting_avg}`
           if(/P/.test(player.position)) {
             subtitle += ` | 防御率: ${player.era}`
@@ -115,9 +91,9 @@ export default class PlayerList extends React.Component {
           let translatedPosition;
           if(/,/.test(position)) {
             let positionArray = position.split(', ');
-            translatedPosition = positionArray.map(p => positionsLookup[p]).join(', ');
+            translatedPosition = positionArray.map(p => positions[p]).join(', ');
           } else {
-            translatedPosition = positionsLookup[position]
+            translatedPosition = positions[position]
           }
 
           return (

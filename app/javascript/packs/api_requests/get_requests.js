@@ -32,3 +32,37 @@ export function fetchMessages() {
   });
   return promiseObj
 }
+
+export function fetchVideos(playerId) {
+  const promiseObj = new Promise((resolve, reject) => {
+    axios.get(`/videos?player_id=${playerId}`, {headers: {'token': localStorage.getItem('token')}})
+    .then(response => {
+      if(response.data.error) {
+        reject(response.data.error)
+      } else {
+        resolve(response.data)
+      }
+    })
+    .catch(error => {
+      reject('Unable to retrieve videos')
+    })
+  });
+  return promiseObj
+}
+
+export function fetchPlayers() {
+  const promiseObj = new Promise((resolve, reject) => {
+    axios.get('/players', {headers: {'token': localStorage.getItem('token')}})
+    .then(response => {
+      if(response.data.error) {
+        reject(response.data.error)
+      } else {
+        resolve(response.data)
+      }
+    })
+    .catch(error => {
+      reject("Couldn't retreive players")
+    })
+  });
+  return promiseObj
+}
