@@ -10,6 +10,7 @@ import MenuItem from 'material-ui/MenuItem';
 import axios from 'axios';
 import {replace} from 'lodash';
 import { validateEmail, validateParams, validateYoutube } from "./shared/functions";
+import { createPlayer } from "./api_requests/post_requests";
 import { positions } from "./shared/constants";
 import {keys} from "lodash";
 
@@ -113,35 +114,27 @@ export default class PlayerRegister extends React.Component {
     } else {
       const videos = [firstVideo, secondVideo, thirdVideo];
       const videosWithLinks = videos.filter(v => v.length > 0);
-      axios({
-        method: 'post',
-        url: '/players',
-        headers: {
-          "Content-Type": "application/json",
-          'X-Requested-With': 'XMLHttpRequest',
-          "X-CSRF-Token": document.getElementsByTagName("meta")[1].content
-        },
-        data: {
-          name,
-          position: position.join(', '),
-          bats,
-          throws,
-          email: email.toLowerCase(),
-          alma_mater: almaMater,
-          accolades,
-          batting_avg: battingAvg,
-          era,
-          password,
-          videos: videosWithLinks
-        }
-      }).then((response) => {
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', 'player');
-        localStorage.setItem('id', response.data.id);
-        this.setState({success: true});
-      }).catch((error) => {
-        this.setState({error: 'Profile unable to be saved 😢'})
-      });
+      const data = {
+        name,
+        position: position.join(', '),
+        bats,
+        throws,
+        email: email.toLowerCase(),
+        alma_mater: almaMater,
+        accolades,
+        batting_avg: battingAvg,
+        era,
+        password,
+        videos: videosWithLinks
+      };
+      createPlayer(data)
+        .then(res => {
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('user', 'player');
+          localStorage.setItem('id', res.id);
+          this.setState({success: true});
+        })
+        .catch(error => this.setState(error))
     }
   }
 

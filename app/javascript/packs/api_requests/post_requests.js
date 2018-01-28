@@ -25,6 +25,26 @@ export function createCoach(team, email, password) {
   return promiseObj
 }
 
+export function createPlayer(data) {
+  const promiseObj = new Promise((resolve, reject) => {
+    axios({
+      method: 'post',
+      url: '/players',
+      headers: {
+        "Content-Type": "application/json",
+        'X-Requested-With': 'XMLHttpRequest',
+        "X-CSRF-Token": document.getElementsByTagName("meta")[1].content
+      },
+      data: data
+    })
+    .then(response => resolve(response.data))
+    .catch(() => {
+        reject("Couldn't create Player")
+    })
+  });
+  return promiseObj
+}
+
 export function editProfile(profile) {
   const promiseObj = new Promise((resolve, reject) => {
     axios({
