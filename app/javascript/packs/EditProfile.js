@@ -68,7 +68,7 @@ class EditProfile extends React.Component {
     const newState = {};
     const urlError = validateYoutube(text);
     newState[video] = text;
-    newState[`${video}Error`] = urlError ? '' : 'Provide a valid YouTube link'
+    newState[`${video}Error`] = urlError ? '' : 'Provide a valid YouTube link';
     this.setState(newState);
   }
 

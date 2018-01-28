@@ -5,11 +5,7 @@ import TextField from 'material-ui/TextField';
 import { Link, Redirect } from "react-router-dom";
 import axios from 'axios';
 import { createCoach } from "./api_requests/post_requests";
-import { validateEmail } from "./shared/functions";
-
-function validateParams(team, password) {
-  return team.length > 0 && password.length > 5
-}
+import { validateEmail, validateParams } from "./shared/functions";
 
 export default class CoachRegister extends React.Component {
   constructor(props) {

@@ -27,3 +27,7 @@ export function validateYoutube(url) {
     return null
   }
 }
+
+export function validateParams(name, password) {
+  return name.length > 0 && password.length > 5
+}

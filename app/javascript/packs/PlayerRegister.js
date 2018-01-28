@@ -9,27 +9,8 @@ import Slider from 'material-ui/Slider';
 import MenuItem from 'material-ui/MenuItem';
 import axios from 'axios';
 import {replace} from 'lodash';
-
-const positions = [
-  'LF',
-  'CF',
-  'RF',
-  '3B',
-  'SS',
-  '2B',
-  '1B',
-  'P',
-  'C'
-];
-
-function validateEmail(email) {
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email.toLowerCase());
-}
-
-function validateParams(name, password) {
-  return name.length > 0 && password.length > 5
-}
+import { validateEmail, validateParams, validateYoutube } from "./shared/functions";
+import { positions } from "./shared/constants";
 
 export default class PlayerRegister extends React.Component {
   constructor(props) {
@@ -62,22 +43,9 @@ export default class PlayerRegister extends React.Component {
 
   handleChangeVideo(video, text) {
     const newState = {};
-    let link;
-    let urlError = '';
-    if(/youtube/.test(text) || /youtu.be/.test(text)) {
-      if(/watch/.test(text)) {
-        link = replace(text, 'watch?v=', '');
-        link = replace(link, 'youtube.com/', 'youtube.com/embed/');
-      } else {
-        link = replace(text, 'youtu.be.com/', 'www.youtube.com/embed/');
-      };
-      link += '?rel=0'
-    } else {
-      link = ''
-      urlError = 'Provide a valid YouTube link'
-    }
-    newState[video] = link;
-    newState[`${video}Error`] = urlError;
+    const urlError = validateYoutube(text);
+    newState[video] = text;
+    newState[`${video}Error`] = urlError ? '' : 'Provide a valid YouTube link';
     this.setState(newState);
   }
 
