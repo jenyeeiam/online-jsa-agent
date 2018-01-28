@@ -7,7 +7,7 @@ class MessagesController < ApplicationController
   end
 
   def index
-    user = check_user_type params[:auth_token]
+    user = check_user_type request.headers['token']
     puts user.inspect
     if user
       # render json: user.messages.order(id: :desc)

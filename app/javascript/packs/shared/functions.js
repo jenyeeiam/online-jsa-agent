@@ -12,7 +12,6 @@ export function validateEmail(email) {
 
 export function validateYoutube(url) {
   let link;
-  let urlError = '';
   if(/youtube/.test(url) || /youtu.be/.test(url)) {
     if(/watch/.test(url)) {
       link = replace(url, 'watch?v=', '');
@@ -22,7 +21,6 @@ export function validateYoutube(url) {
     };
     return link
   } else {
-    urlError = 'Provide a valid YouTube link'
     return null
   }
 }

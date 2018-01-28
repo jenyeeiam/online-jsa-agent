@@ -37,7 +37,7 @@ class PlayersController < ApplicationController
       render json: {error: 'Unable to update player'}
     end
     payload = {data: @player.email}
-    token = JWT.encode payload, nil, 'none'
+    token = JWT.encode payload, Rails.application.secrets[:hmac_secret], 'HS256'
     render json: {token: token, id: @player.id}
   end
 

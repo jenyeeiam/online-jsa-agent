@@ -15,10 +15,7 @@ export function fetchPlayer(playerId) {
 
 export function fetchMessages() {
   const promiseObj = new Promise((resolve, reject) => {
-    axios({
-      method: 'get',
-      url: `/messages?auth_token=${localStorage.getItem('token')}`
-    })
+    axios.get('/messages', {headers: {'token': localStorage.getItem('token')}})
     .then(response => {
       if(response.data.error) {
         reject(response.data.error)

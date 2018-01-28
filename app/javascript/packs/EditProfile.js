@@ -247,7 +247,7 @@ class EditProfile extends React.Component {
               style={{width: '50%'}}
               multiple={true}
             >
-              {positions.map((pos, i) => <MenuItem key={i} value={pos} primaryText={pos} />)}
+              {keys(positions).map((pos, i) => <MenuItem key={i} value={pos} primaryText={pos} />)}
             </SelectField>
           </div>
           <div className="avg">
