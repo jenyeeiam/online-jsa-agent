@@ -3,7 +3,7 @@ class PlayersController < ApplicationController
   def index
     auth_token = request.headers['token']
     if auth_token != 'null' && authenticate_coach(auth_token)
-      render json: Player.where(deleted: false).order(id: :desc)
+      render json: Player.where(deleted: false).order(updated_at: :desc)
     else
       render json: {error: "もう1度ログインして下さい"}
     end
@@ -26,6 +26,7 @@ class PlayersController < ApplicationController
   def update
     @player = Player.find(params[:id])
     if @player.update_attributes(update_player_params)
+      # need to put this here because the password field is optional
       @player.update_attributes({password: params[:password]}) unless params[:password].length == 0
       @player.translate_accolades(params[:accolades])
       params[:videos].each do |vid|
