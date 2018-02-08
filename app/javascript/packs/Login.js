@@ -29,7 +29,7 @@ class Login extends React.Component {
   handleSubmit() {
     const {email, password} = this.state;
     if(email.length > 0 && password.length > 0) {
-      login(email, password)
+      login(email.toLowerCase(), password)
         .then(response => {
           localStorage.setItem('token', response.token);
           localStorage.setItem('user', response.user);
