@@ -271,7 +271,7 @@ export default class PlayerRegister extends React.Component {
         </div>
       </div>
       <h1>Videos</h1>
-      <p>{"Video is the best way for Japanese coaches to evaluate a player. In most cases coaches are not aware of who's who in NCAA or NPF softball. Please provide a maxiumum of 3 links to YouTube videos of games or practice in the boxes below. If you don't have videos now don't worry, you can provide links to videos later by editing your profile."}</p>
+      <p>{"Video is the best way for Japanese coaches to evaluate a player. In most cases coaches are not aware of who's who in NCAA or NPF softball. Please provide a maximum of 3 links to YouTube videos of games or practice in the boxes below. If you don't have videos now don't worry, you can provide links to videos later by editing your profile."}</p>
       <div className="video-urls">
         <div className="inline-box-button">
           <TextField
