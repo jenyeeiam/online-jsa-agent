@@ -271,47 +271,45 @@ export default class PlayerRegister extends React.Component {
       </div>
       <h1>Videos</h1>
       <p>{"Video is the best way for Japanese coaches to evaluate a player. In most cases coaches are not aware of who's who in NCAA or NPF softball. Please provide a maxiumum of 3 links to YouTube videos of games or practice in the boxes below. If you don't have videos now don't worry, you can provide links to videos later by editing your profile."}</p>
-      <div className="video-urls-previews">
-        <div className="video-urls">
-          <div className="inline-box-button">
-            <TextField
-              name='1'
-              style={{width: '45%'}}
-              hintText="e.g. https://www.youtube.com/watch..."
-              onChange={(e, newVal) => this.handleChangeVideo('firstVideo', newVal)}
-              errorText={firstVideoError}
-            />
-          </div>
-          <div className="inline-box-button">
-            <TextField
-              name='2'
-              style={{width: '45%'}}
-              hintText="e.g. https://www.youtube.com/watch..."
-              onChange={(e, newVal) => this.handleChangeVideo('secondVideo', newVal)}
-              errorText={secondVideoError}
-            />
-          </div>
-          <div className="inline-box-button">
-            <TextField
-              name='3'
-              style={{width: '45%'}}
-              hintText="e.g. https://www.youtube.com/watch..."
-              onChange={(e, newVal) => this.handleChangeVideo('thirdVideo', newVal)}
-              errorText={thirdVideoError}
-            />
-          </div>
+      <div className="video-urls">
+        <div className="inline-box-button">
+          <TextField
+            name='1'
+            style={{width: '45%'}}
+            hintText="e.g. https://www.youtube.com/watch..."
+            onChange={(e, newVal) => this.handleChangeVideo('firstVideo', newVal)}
+            errorText={firstVideoError}
+          />
         </div>
-        <div className="video-previews">
-          {validateYoutube(firstVideo) && <div className="preview">
-            <iframe width="100%"  src={validateYoutube(this.state.firstVideo)} frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
-          </div>}
-          {validateYoutube(secondVideo) && <div className="preview">
-            <iframe width="100%" src={validateYoutube(this.state.secondVideo)} frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
-          </div>}
-          {validateYoutube(thirdVideo) && <div className="preview">
-            <iframe width="100%" src={validateYoutube(this.state.thirdVideo)} frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
-          </div>}
+        <div className="inline-box-button">
+          <TextField
+            name='2'
+            style={{width: '45%'}}
+            hintText="e.g. https://www.youtube.com/watch..."
+            onChange={(e, newVal) => this.handleChangeVideo('secondVideo', newVal)}
+            errorText={secondVideoError}
+          />
         </div>
+        <div className="inline-box-button">
+          <TextField
+            name='3'
+            style={{width: '45%'}}
+            hintText="e.g. https://www.youtube.com/watch..."
+            onChange={(e, newVal) => this.handleChangeVideo('thirdVideo', newVal)}
+            errorText={thirdVideoError}
+          />
+        </div>
+      </div>
+      <div className="video-previews">
+        {validateYoutube(firstVideo) && <div className="preview">
+          <iframe width="100%"  src={validateYoutube(this.state.firstVideo)} frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
+        </div>}
+        {validateYoutube(secondVideo) && <div className="preview">
+          <iframe width="100%" src={validateYoutube(this.state.secondVideo)} frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
+        </div>}
+        {validateYoutube(thirdVideo) && <div className="preview">
+          <iframe width="100%" src={validateYoutube(this.state.thirdVideo)} frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
+        </div>}
       </div>
       <div className='signup-btns'>
         <RaisedButton
