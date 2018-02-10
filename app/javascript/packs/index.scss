@@ -171,6 +171,24 @@ body {
       grid-area: a;
     }
   }
+  .video-previews {
+    .preview {
+      display: inline-flex;
+    }
+  //   display: grid;
+  //   grid-template-columns: repeat(1, 1fr);
+  //   grid-template-areas:
+  //         "u p";
+  //   .video-urls {
+  //     grid-area: u;
+  //     .inline-box-button > div {
+  //       width: 100% !important;
+  //     }
+  //   }
+  //   .video-previews {
+  //     grid-area: p;
+  //   }
+  }
 }
 
 
