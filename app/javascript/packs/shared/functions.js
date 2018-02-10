@@ -17,7 +17,7 @@ export function validateYoutube(url) {
       link = replace(url, 'watch?v=', '');
       link = replace(link, 'youtube.com/', 'youtube.com/embed/');
     } else {
-      link = replace(url, 'youtu.be.com/', 'www.youtube.com/embed/');
+      link = replace(url, 'youtu.be/', 'www.youtube.com/embed/');
     };
     return link
   } else {

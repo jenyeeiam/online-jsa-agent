@@ -2,7 +2,6 @@ import React from 'react';
 import RaisedButton from "material-ui/RaisedButton";
 import FlatButton from "material-ui/FlatButton";
 import TextField from 'material-ui/TextField';
-import {GridList, GridTile} from 'material-ui/GridList';
 import { Link, Redirect } from "react-router-dom";
 import SelectField from 'material-ui/SelectField';
 import Slider from 'material-ui/Slider';
@@ -320,6 +319,17 @@ class EditProfile extends React.Component {
               onChange={(e, newVal) => this.handleChangeVideo('video2', newVal)}
               errorText={video2Error}
             />
+          </div>
+          <div className="video-previews">
+            {validateYoutube(video0) && <div className="preview">
+              <iframe width="100%"  src={validateYoutube(this.state.video0)} frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
+            </div>}
+            {validateYoutube(video1) && <div className="preview">
+              <iframe width="100%" src={validateYoutube(this.state.video1)} frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
+            </div>}
+            {validateYoutube(video2) && <div className="preview">
+              <iframe width="100%" src={validateYoutube(this.state.video2)} frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
+            </div>}
           </div>
         </div>
         <div className='signup-btns'>

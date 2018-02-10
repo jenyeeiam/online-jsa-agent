@@ -171,6 +171,11 @@ body {
       grid-area: a;
     }
   }
+  .video-previews {
+    .preview {
+      display: inline-flex;
+    }
+  }
 }
 
 
