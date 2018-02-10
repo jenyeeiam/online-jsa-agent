@@ -14,7 +14,7 @@ class PlayersController < ApplicationController
     player = Player.find(params[:id])
     if auth_token != 'null' && authenticate_player(auth_token)
       if player
-        render json: {player: player, videos: player.videos.order(:updated_at).limit(3)}
+        render json: {player: player, videos: player.videos.order(updated_at: :desc).limit(3)}
       else
         render json: {error: "No player found"}
       end
