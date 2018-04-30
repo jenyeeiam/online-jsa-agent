@@ -111,7 +111,7 @@ export default class PlayerList extends React.Component {
                 <Link to={`/message/${player.id}`}>
                   <FlatButton label={`${player.name}にメッセージを送る`} secondary={true}/>
                 </Link>
-                <FlatButton label='ビデオ' secondary={true} onClick={() => {
+                <FlatButton label='ビデオを見る' secondary={true} onClick={() => {
                   this.handleFetchVideos(player.id);
                   this.handleOpen();
                 }}/>

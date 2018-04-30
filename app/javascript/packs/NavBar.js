@@ -42,7 +42,7 @@ export default class NavBar extends React.Component {
         {signedIn && <div>
           <Link to='/' onClick={this.handleSignOut}><span className='logout-btn'>{user === 'coach' ? 'ログアウト' : 'Logout'}</span></Link>
           <Link to={`/my-messages/${user}`}><span className='logout-btn'>{user === 'coach' ? 'メッセージ' : 'My Messages'}</span></Link>
-          {user === 'coach' && <Link to='/players-list'><span className='logout-btn'>{user === 'coach' ? '選手の情報て' : 'Players'}</span></Link>}
+          {user === 'coach' && <Link to='/players-list'><span className='logout-btn'>{user === 'coach' ? '選手の情報' : 'Players'}</span></Link>}
           {user === 'player' && <Link to={`/player/${userId}/edit`}><span className='logout-btn'>Edit Profile</span></Link>}
         </div>}
     </div>
